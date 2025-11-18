@@ -1,11 +1,9 @@
 /* 基礎樣式 */
 #gk-shop {
   font-family: 'Microsoft JhengHei', Arial, sans-serif;
-  max-width: 1400px;
   margin: 0 auto;
-  border: 2px solid #333;
-  background: linear-gradient(135deg, #ffc0cb 0%, #ffb6c1 50%, #ffa0b0 100%);
-  color: #000;
+  background: #f0f2f5;
+  color: #333;
 }
 
 /* HEADER */
@@ -35,55 +33,76 @@
 /* 登入/註冊按鈕 (右上角) */
 .auth-buttons {
   display: flex;
-  gap: 10px;
+  align-items: center;
+  gap: 15px;
 }
 
 .auth-btn {
-  padding: 10px 20px;
-  border: 2px solid #000;
+  padding: 10px 22px;
+  border: none;
   font-weight: 700;
   font-size: 1rem;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.3s ease;
   border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.cart-btn {
+  background: #fff;
+  color: #333;
+  font-size: 1.2rem;
+  border: 1px solid #ddd;
+}
+.cart-btn:hover {
+  background: #f8f8f8;
+  border-color: #ccc;
 }
 
 .login-btn {
   background: #fff;
-  color: #000;
+  color: #4285F4;
+  border: 1px solid #4285F4;
 }
 
 .login-btn:hover {
-  background: #000;
+  background: #4285F4;
   color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(66, 133, 244, 0.3);
 }
 
 .register-btn {
-  background: #ff69b4;
+  background: linear-gradient(45deg, #4285F4, #34A853);
   color: #fff;
+  border: none;
 }
 
 .register-btn:hover {
-  background: #ff1493;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
 .logout-btn {
-  background: #ff4444;
+  background: #DB4437;
   color: #fff;
+  border: none;
 }
 
 .logout-btn:hover {
-  background: #cc0000;
+  background: #b03126;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(219, 68, 55, 0.3);
 }
 
 /* 導航列 */
 .main-nav {
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   margin-top: 15px;
   padding: 10px 0;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 20px;
 }
 
 .nav-item {
@@ -111,6 +130,73 @@
   border-color: #000;
 }
 
+/* NEW: Top Filters */
+.top-filters {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+}
+
+.filter-dropdown {
+  border: 2px solid #000;
+  padding: 0;
+  height: 45px;
+  background: #fff;
+  border-radius: 5px;
+}
+
+.category-select {
+  width: 100%;
+  height: 100%;
+  padding: 8px;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #000;
+  background: transparent;
+}
+
+.filter-list {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border: none;
+  background: none;
+  padding: 0;
+}
+
+.filter-list h4 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.filter-list p {
+  margin: 0;
+  font-size: 0.9rem;
+  cursor: pointer;
+  font-weight: 600;
+  padding: 8px 12px;
+  border: 1px solid #000;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.5);
+  transition: all 0.2s;
+}
+
+.filter-list p:hover {
+  background: #000;
+  color: #fff;
+  border-color: #000;
+}
+
 /* MAIN CONTENT */
 .main-content-area {
   display: flex;
@@ -122,55 +208,64 @@
 /* 側邊欄 */
 .sidebar {
   width: 220px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
   flex-shrink: 0;
+
+  padding: 15px;
+  border-radius: 8px;
 }
 
-.filter-dropdown {
-  border: 2px solid #000;
+.sidebar-nav {
+  list-style: none;
   padding: 0;
-  height: 45px;
-  background: #fff;
+  margin: 0;
 }
 
-.category-select {
-  width: 100%;
-  height: 100%;
-  padding: 8px;
-  border: none;
-  font-size: 1rem;
+.sidebar-nav li {
+  padding: 12px 15px;
   font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  border-radius: 6px;
+  margin-bottom: 5px;
+}
+
+.sidebar-nav li:last-child {
+  border-bottom: none;
+}
+
+.sidebar-nav li:hover {
+  background: #f0f2f5;
   color: #000;
 }
 
-.filter-list, .extra-block {
-  border: 2px solid #000;
-  padding: 15px;
-  background: rgba(255, 255, 255, 0.6);
+
+.content-wrapper {
+  flex-grow: 1;
+  min-width: 0;
 }
 
-.filter-list h4, .extra-block h4 {
+.extra-block {
+  border: 1px solid #eee;
+  padding: 15px;
+  background: #fff;
+  min-width: 220px;
+}
+
+.extra-block h4 {
   margin: 0 0 12px 0;
   font-size: 1.1rem;
   font-weight: 800;
-  border-bottom: 2px solid #000;
+  border-bottom: 1px solid #eee;
   padding-bottom: 8px;
-  color: #000;
+  color: #333;
 }
 
-.filter-list p, .extra-block p {
+.extra-block p {
   margin: 10px 0;
   font-size: 1rem;
   cursor: pointer;
   font-weight: 600;
-  color: #000;
-}
-
-.filter-list p:hover {
-  color: #ff1493;
-  font-weight: 700;
+  color: #555;
 }
 
 /* 商品展示 */
@@ -182,40 +277,40 @@
 }
 
 .product-card {
-  border: 1px solid #ddd; /* 更輕的邊框 */
+  border: 1px solid #e0e0e0;
   display: flex;
   flex-direction: column;
   transition: transform 0.2s, box-shadow 0.2s;
   background: #fff;
-  border-radius: 5px;
-  overflow: hidden; /* 確保內容不溢出圓角 */
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .product-card:hover {
-  transform: translateY(-5px); /* 輕微上浮 */
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2); /* 柔和陰影 */
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
 }
 
 /* 圖片容器 */
 .product-image-container {
-  position: relative; /* 為了讓標籤定位 */
+  position: relative;
   width: 100%;
-  height: 250px; /* 固定高度讓圖片統一 */
+  aspect-ratio: 1 / 1;
   overflow: hidden;
-  background-color: #f8f8f8; /* 圖片載入前的背景 */
-  border-bottom: 1px solid #eee;
+  background-color: #f8f8f8;
+  border-bottom: 1px solid #f0f0f0;
 }
 
 .product-image-container img {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* 裁剪圖片以填滿容器 */
+  object-fit: cover;
   display: block;
   transition: transform 0.3s ease-in-out;
 }
 
 .product-card:hover .product-image-container img {
-  transform: scale(1.05); /* 懸停時輕微放大圖片 */
+  transform: scale(1.05);
 }
 
 /* 商品標籤 */
@@ -223,8 +318,8 @@
   position: absolute;
   top: 10px;
   left: 10px;
-  background-color: #f1c40f; /* 鮮明的黃色 */
-  color: #333;
+  background-color: #4285F4;
+  color: #fff;
   padding: 4px 8px;
   border-radius: 3px;
   font-size: 0.8rem;
@@ -233,9 +328,9 @@
   box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
 
-.product-tag.預購 { /* 如果有預購標籤可以有不同顏色 */
-    background-color: #3498db; 
-    color: white;
+.product-tag.預購 {
+    background-color: #fbbc05; 
+    color: #333;
 }
 
 
@@ -245,7 +340,7 @@
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* 左對齊 */
+  align-items: flex-start;
 }
 
 .product-series {
@@ -266,30 +361,27 @@
 .product-price-range {
   font-size: 1.1rem;
   font-weight: bold;
-  color: #e74c3c; /* 價格使用紅色 */
-  margin: auto 0 0 0; /* 推到底部 */
+  color: #DB4437;
+  margin: auto 0 0 0;
 }
-
-/* 移除原有的價格、市價、庫存、按鈕樣式 (因為參考圖沒有這些) */
-/* .price, .market-price, .stock-badge, .buy-btn { display: none; } */
-
 
 /* 內容區塊 */
 .content-section {
   flex-grow: 1;
   padding: 25px;
-  border: 3px solid #000;
-  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid #e0e0e0;
+  background: #fff;
+  border-radius: 8px;
 }
 
 .section-title {
   margin: 0 0 25px 0;
   padding-bottom: 12px;
-  border-bottom: 3px solid #000;
+  border-bottom: 1px solid #eee;
   font-size: 1.8rem;
   font-weight: 900;
-  font-style: italic;
-  color: #000;
+  font-style: normal;
+  color: #333;
 }
 
 /* 訂單列表 */
@@ -300,9 +392,10 @@
 }
 
 .order-item {
-  border: 3px solid #000;
+  border: 1px solid #e0e0e0;
   padding: 20px;
   background: #fff;
+  border-radius: 8px;
 }
 
 .order-header {
@@ -315,12 +408,12 @@
 .order-header h3 {
   margin: 0;
   font-size: 1.2rem;
-  font-weight: 800;
-  color: #000;
+  font-weight: 700;
+  color: #333;
 }
 
 .order-date {
-  color: #555;
+  color: #777;
   font-size: 1rem;
   font-weight: 600;
   margin: 5px 0 0 0;
@@ -329,36 +422,36 @@
 .order-status {
   padding: 8px 15px;
   border-radius: 6px;
-  font-weight: 800;
+  font-weight: 700;
   font-size: 1rem;
-  border: 2px solid #000;
+  border: none;
 }
 
 .status-completed {
-  background: #90EE90;
-  color: #000;
+  background: #e6f4ea;
+  color: #34A853;
 }
 
 .status-shipping {
-  background: #87CEEB;
-  color: #000;
+  background: #e8f0fe;
+  color: #4285F4;
 }
 
 .status-pending {
-  background: #FFD700;
-  color: #000;
+  background: #fef7e0;
+  color: #fbbc05;
 }
 
 .order-total {
   font-size: 1.2rem;
   font-weight: 700;
-  color: #000;
+  color: #333;
 }
 
 .order-total strong {
-  color: #ff1493;
+  color: #DB4437;
   font-size: 1.5rem;
-  font-weight: 900;
+  font-weight: 700;
 }
 
 /* 錢包 */
@@ -367,23 +460,24 @@
 }
 
 .wallet-balance {
-  border: 3px solid #000;
+  border: 1px solid #e0e0e0;
   padding: 35px;
   text-align: center;
   margin-bottom: 25px;
   background: #fff;
+  border-radius: 8px;
 }
 
 .wallet-balance h3 {
   font-size: 1.3rem;
-  font-weight: 800;
-  color: #000;
+  font-weight: 700;
+  color: #333;
 }
 
 .balance-amount {
   font-size: 2.8rem;
-  font-weight: 900;
-  color: #ff1493;
+  font-weight: 700;
+  color: #4285F4;
   margin: 12px 0 0 0;
 }
 
@@ -396,100 +490,109 @@
 .action-btn {
   flex: 1;
   padding: 15px;
-  background: #000;
+  background: #4285F4;
   color: white;
   border: none;
   cursor: pointer;
-  font-weight: 800;
+  font-weight: 700;
   font-size: 1.1rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
 }
 
 .action-btn:hover {
-  background: #ff1493;
+  background: #3367d6;
+  box-shadow: 0 4px 12px rgba(66, 133, 244, 0.3);
 }
 
 .action-btn.secondary {
-  background: #555;
+  background: #6c757d;
 }
 
 .action-btn.secondary:hover {
-  background: #ff1493;
+  background: #5a6268;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
 .topup-form {
-  border: 3px solid #000;
+  border: 1px solid #e0e0e0;
   padding: 25px;
   margin-bottom: 25px;
   background: #fff;
+  border-radius: 8px;
 }
 
 .topup-form h4 {
   margin: 0 0 18px 0;
   font-size: 1.2rem;
-  font-weight: 800;
-  color: #000;
+  font-weight: 700;
+  color: #333;
 }
 
 .topup-form input {
   width: 100%;
   padding: 12px;
-  border: 2px solid #000;
+  border: 1px solid #ccc;
   margin-bottom: 12px;
   font-size: 1.1rem;
   font-weight: 600;
+  border-radius: 6px;
 }
 
 .cancel-btn {
   padding: 12px 25px;
-  background: #999;
+  background: #6c757d;
   color: white;
   border: none;
   cursor: pointer;
   margin-left: 12px;
   font-weight: 700;
   font-size: 1rem;
+  border-radius: 8px;
+  transition: background 0.3s;
 }
 
 .cancel-btn:hover {
-  background: #666;
+  background: #5a6268;
 }
 
 .transaction-list {
-  border: 3px solid #000;
+  border: 1px solid #e0e0e0;
   padding: 25px;
   background: #fff;
+  border-radius: 8px;
 }
 
 .transaction-list h4 {
   margin: 0 0 18px 0;
-  border-bottom: 2px solid #000;
+  border-bottom: 1px solid #eee;
   padding-bottom: 12px;
   font-size: 1.2rem;
-  font-weight: 800;
-  color: #000;
+  font-weight: 700;
+  color: #333;
 }
 
 .transaction-item {
   display: flex;
   justify-content: space-between;
   padding: 12px 0;
-  border-bottom: 2px solid #eee;
+  border-bottom: 1px solid #f0f0f0;
   font-weight: 600;
-  color: #000;
+  color: #333;
 }
 
 .positive { 
-  color: #008000;
-  font-weight: 800;
+  color: #34A853;
+  font-weight: 700;
 }
 
 .negative { 
-  color: #ff1493;
-  font-weight: 800;
+  color: #DB4437;
+  font-weight: 700;
 }
 
 .trans-date {
-  color: #666;
+  color: #777;
   font-size: 0.95rem;
   font-weight: 600;
 }
@@ -498,18 +601,20 @@
 .login-container {
   max-width: 450px;
   margin: 50px auto;
-  border: 3px solid #000;
+  border: 1px solid #e0e0e0;
   padding: 35px;
   background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
 .login-container h2 {
   text-align: center;
   margin: 0 0 35px 0;
   font-size: 1.8rem;
-  font-weight: 900;
-  font-style: italic;
-  color: #000;
+  font-weight: 700;
+  font-style: normal;
+  color: #333;
 }
 
 .login-form {
@@ -524,17 +629,34 @@
 .form-group label {
   display: block;
   margin-bottom: 10px;
-  font-weight: 800;
-  font-size: 1.1rem;
-  color: #000;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #333;
 }
 
 .form-group input {
   width: 100%;
   padding: 12px;
-  border: 2px solid #000;
+  border: 1px solid #ccc;
   font-size: 1rem;
   font-weight: 600;
+  border-radius: 6px;
+}
+
+.login-form .buy-btn {
+  padding: 15px 20px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  background: #4285F4;
+  border: none;
+  color: white;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.login-form .buy-btn:hover {
+  background: #3367d6;
+  box-shadow: 0 4px 12px rgba(66, 133, 244, 0.3);
 }
 
 .login-footer {
@@ -588,21 +710,38 @@
 
 /* 響應式 */
 
-/* 桌面版 1200px-1400px (預設) */
+/* Desktop screens up to 1600px */
+@media (max-width: 1600px) {
+  #gk-shop {
+    max-width: 1400px;
+    border: 2px solid #333;
+  }
+}
+
+/* New breakpoint for ultra-wide screens */
+@media (min-width: 1601px) {
+  #gk-shop {
+    max-width: 100%; /* Full width */
+    margin: 0; /* No auto margin, no centering */
+    border: none; /* No border */
+  }
+
+  .header-container {
+    max-width: 100%; /* Make header also full width */
+  }
+
+  .main-content-area {
+    padding: 25px 15px; /* Adjust padding for full width content, keep top/bottom */
+  }
+}
 
 /* 小桌面/大筆電 (1200px) */
 @media (max-width: 1200px) {
   #gk-shop {
     max-width: 100%;
   }
-
   .product-display {
-    grid-template-columns: repeat(3, 1fr);
     gap: 20px;
-  }
-
-  .sidebar {
-    width: 200px;
   }
 }
 
@@ -611,30 +750,21 @@
   #gk-shop {
     border: none;
   }
-
   .main-content-area {
     padding: 20px;
     gap: 20px;
   }
-
-  .sidebar {
-    width: 180px;
-  }
-
   .product-display {
     grid-template-columns: repeat(2, 1fr);
     gap: 18px;
   }
-
   .nav-item {
     padding: 10px 20px;
     font-size: 1rem;
   }
-
   .gk-title h1 {
     font-size: 1.8rem;
   }
-
   .auth-btn {
     padding: 8px 16px;
     font-size: 0.95rem;
@@ -647,37 +777,27 @@
     flex-direction: column;
     gap: 15px;
   }
-
   .auth-buttons {
     width: 100%;
     justify-content: center;
   }
-
   .main-content-area {
     flex-direction: column;
   }
-
   .sidebar {
     width: 100%;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
   }
 
   .product-display {
     grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
   }
-
   .nav-item {
     padding: 10px 18px;
     font-size: 0.95rem;
   }
-
   .main-nav {
     gap: 8px;
   }
-
   .gk-title h1 {
     font-size: 1.6rem;
   }
@@ -688,50 +808,40 @@
   .main-content-area {
     padding: 12px;
   }
-
   .sidebar {
     grid-template-columns: 1fr;
   }
-
   .product-display {
     grid-template-columns: 1fr;
     gap: 12px;
   }
-
   .wallet-actions {
     flex-direction: column;
   }
-
   .main-nav {
     flex-direction: column;
     align-items: stretch;
     padding: 0 10px;
   }
-
   .nav-item {
     text-align: center;
     margin: 3px 0;
     border: 2px solid #000;
   }
-
   .gk-title h1 {
     font-size: 1.4rem;
   }
-
   .product-image-container {
     height: 180px; /* 手機上圖片高度調整 */
   }
-
   .auth-buttons {
     flex-direction: row;
     gap: 8px;
   }
-
   .auth-btn {
     flex: 1;
     padding: 10px;
   }
-
   .footer-links a {
     display: block;
     margin: 8px 0;
