@@ -3,11 +3,11 @@
     <header class="main-header">
       <div class="header-container">
         <div class="gk-title" @click="currentPage = 'products'" style="cursor: pointer;">
-          <h1>🎎 GK 收藏投資平台</h1>
+          <h1>RC玩童</h1>
         </div>
         
         <div class="auth-buttons">
-          <button class="auth-btn cart-btn">🛒 購物車</button>
+          <button class="auth-btn cart-btn" @click="currentPage = 'cart'">🛒 購物車</button>
           <button class="auth-btn login-btn" v-if="!isLoggedIn" @click="currentPage = 'login'">登入</button>
           <button class="auth-btn register-btn" v-if="!isLoggedIn" @click="currentPage = 'register'">註冊</button>
           <button class="auth-btn logout-btn" v-else @click="logout">登出</button>
@@ -69,7 +69,8 @@
             <div class="product-info">
               <p class="product-series">{{ product.series }}</p>
               <h3 class="product-name">{{ product.name }}</h3>
-              <p class="product-price-range">NT$ {{ product.minPrice.toLocaleString() }} ~ NT$ {{ product.maxPrice.toLocaleString() }}</p>
+              <p class="product-price-range">NT$ {{ product.Price.toLocaleString() }}</p>
+              <button class="buy-btn" @click="addToCart(product)">加入購物車</button>
             </div>
           </div>
         </section>
@@ -103,7 +104,15 @@
           </div>
         </section>
 
-        
+        <section class="content-section" v-if="currentPage === 'cart'">
+          <shopping-cart 
+            :cart-items="cartItems" 
+            :is-logged-in="isLoggedIn"
+            @remove-from-cart="removeFromCart"
+            @require-login="currentPage = 'login'"
+            @back-to-products="currentPage = 'products'"
+          ></shopping-cart>
+        </section>
 
         <section class="content-section" v-if="currentPage === 'login'">
           <div class="login-container">
@@ -128,15 +137,15 @@
             <h2>會員註冊</h2>
             <form @submit.prevent="register" class="login-form">
               <div class="form-group">
-                <label>姓名</label>
+                <label>姓名 <span style="color: red;">*</span></label>
                 <input type="text" v-model="registerForm.name" required>
               </div>
               <div class="form-group">
-                <label>電子郵件</label>
+                <label>電子郵件 <span style="color: red;">*</span></label>
                 <input type="email" v-model="registerForm.email" required>
               </div>
               <div class="form-group">
-                <label>手機</label>
+                <label>手機 <span style="color: red;">*</span></label>
                 <input type="tel" v-model="registerForm.phone" required>
               </div>
               <div class="form-group">
@@ -144,11 +153,11 @@
                 <input type="date" v-model="registerForm.birthday" required>
               </div>
               <div class="form-group">
-                <label>密碼</label>
+                <label>密碼 <span style="color: red;">*</span></label>
                 <input type="password" v-model="registerForm.password" required>
               </div>
               <div class="form-group">
-                <label>確認密碼</label>
+                <label>確認密碼 <span style="color: red;">*</span></label>
                 <input type="password" v-model="registerForm.confirmPassword" required>
               </div>
               <button type="submit" class="buy-btn">註冊</button>

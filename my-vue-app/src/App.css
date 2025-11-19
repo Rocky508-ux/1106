@@ -120,22 +120,22 @@ html, body {
   font-size: 1.1rem;
   border: 2px solid transparent;
   transition: all 0.3s;
-  color: #000;
-  background: rgba(255, 255, 255, 0.4);
+  color: #fff; /* White text for contrast */
+  background: #007bff; /* Vibrant blue background */
   border-radius: 8px;
 }
 
 .nav-item:hover {
-  background: #000;
+  background: #0056b3; /* Darker blue on hover */
   color: #fff;
-  border-color: #000;
+  border-color: #0056b3;
   transform: translateY(-2px);
 }
 
 .nav-item.active {
-  background: #000;
+  background: #0056b3; /* Darker blue for active */
   color: #fff;
-  border-color: #000;
+  border-color: #0056b3;
 }
 
 /* NEW: Top Filters */
@@ -217,9 +217,10 @@ html, body {
 .sidebar {
   width: 220px;
   flex-shrink: 0;
-
+  background: #ffffff;
   padding: 15px;
   border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
 .sidebar-nav {
