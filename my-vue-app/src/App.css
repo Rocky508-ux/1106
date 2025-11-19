@@ -1,7 +1,15 @@
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* Prevent horizontal scrollbar */
+}
+
 /* 基礎樣式 */
 #gk-shop {
   font-family: 'Microsoft JhengHei', Arial, sans-serif;
-  margin: 0 auto;
+  width: 100%;
   background: #f0f2f5;
   color: #333;
 }
@@ -713,8 +721,9 @@
 /* Desktop screens up to 1600px */
 @media (max-width: 1600px) {
   #gk-shop {
-    max-width: 1400px;
-    border: 2px solid #333;
+    width: 100%; /* Ensure full width */
+    max-width: 100%; /* Override any potentially conflicting max-width */
+    border: none; /* Remove the border */
   }
 }
 
