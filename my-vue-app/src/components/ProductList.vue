@@ -1,3 +1,16 @@
+<script setup>
+import { ref } from 'vue';
+
+const products = ref([
+  {
+    id: 1,
+    name: '野獸',
+    image: '/image/野獸.webp',
+    description: '這是一張關於野獸的圖片。'
+  }
+]);
+</script>
+
 <template>
   <div class="product-list">
     <h1>產品列表</h1>
@@ -8,24 +21,6 @@
     </div>
   </div>
 </template>
-
-<script>
-export default {
-  name: 'ProductList',
-  data() {
-    return {
-      products: [
-        {
-          id: 1,
-          name: '野獸',
-          image: '/image/野獸.webp',
-          description: '這是一張關於野獸的圖片。'
-        }
-      ]
-    };
-  }
-};
-</script>
 
 <style scoped>
 .product-list {
