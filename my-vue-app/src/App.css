@@ -1,11 +1,3 @@
-html, body {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden; /* Prevent horizontal scrollbar */
-}
-
 /* 基礎樣式 */
 #gk-shop {
   font-family: 'Microsoft JhengHei', Arial, sans-serif;
@@ -17,22 +9,35 @@ html, body {
 /* HEADER */
 .main-header {
   border-bottom: 3px solid #000;
-  padding: 20px;
+  padding: 15px 0;
   background: rgba(255, 255, 255, 0.3);
 }
 
-.header-container {
+.header-inner-container,
+.main-inner-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.top-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 1200px;
-  margin: 0 auto;
+  margin-bottom: 15px;
+}
+
+.gk-title {
+  /* Removed padding and background */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .gk-title h1 {
   margin: 0;
-  font-size: 2.2rem;
-  color: #000;
+  font-size: 2.8rem; /* Further increased font size */
+  color: #0056b3; /* Darker blue color */
   font-weight: 900;
   font-style: italic;
   text-shadow: 2px 2px 4px rgba(255,255,255,0.5);
@@ -42,24 +47,27 @@ html, body {
 .auth-buttons {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 10px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 8px;
 }
 
 .auth-btn {
-  padding: 10px 22px;
+  padding: 8px 18px;
   border: none;
   font-weight: 700;
-  font-size: 1rem;
+  font-size: 0.9rem;
   cursor: pointer;
   transition: all 0.3s ease;
-  border-radius: 8px;
+  border-radius: 6px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 .cart-btn {
   background: #fff;
   color: #333;
-  font-size: 1.2rem;
+  font-size: 1rem;
   border: 1px solid #ddd;
 }
 .cart-btn:hover {
@@ -107,146 +115,45 @@ html, body {
 .main-nav {
   display: flex;
   justify-content: space-around;
-  margin-top: 15px;
-  padding: 10px 0;
+  padding: 5px 0;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 15px;
 }
 
 .nav-item {
-  padding: 12px 25px;
+  padding: 8px 20px;
   cursor: pointer;
-  font-weight: 800;
-  font-size: 1.1rem;
-  border: 2px solid transparent;
+  font-weight: 700;
+  font-size: 0.95rem;
+  border: none;
   transition: all 0.3s;
-  color: #fff; /* White text for contrast */
-  background: #007bff; /* Vibrant blue background */
-  border-radius: 8px;
+  color: #000;
+  background: transparent;
+  border-radius: 6px;
 }
 
 .nav-item:hover {
-  background: #0056b3; /* Darker blue on hover */
-  color: #fff;
-  border-color: #0056b3;
-  transform: translateY(-2px);
+  background: transparent;
+  color: #0056b3; /* Darker blue on hover */
+  border-color: transparent;
+  transform: none; /* Removed transform */
 }
 
 .nav-item.active {
-  background: #0056b3; /* Darker blue for active */
-  color: #fff;
-  border-color: #0056b3;
-}
-
-/* NEW: Top Filters */
-.top-filters {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-  flex-wrap: wrap;
-  margin-top: 20px;
-  padding: 10px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 8px;
-}
-
-.filter-dropdown {
-  border: 2px solid #000;
-  padding: 0;
-  height: 45px;
-  background: #fff;
-  border-radius: 5px;
-}
-
-.category-select {
-  width: 100%;
-  height: 100%;
-  padding: 8px;
-  border: none;
-  font-size: 1rem;
-  font-weight: 600;
-  color: #000;
-  background: transparent;
-}
-
-.filter-list {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  border: none;
-  background: none;
-  padding: 0;
-}
-
-.filter-list h4 {
-  margin: 0;
-  font-size: 1rem;
-  font-weight: 700;
-  border-bottom: none;
-  padding-bottom: 0;
-}
-
-.filter-list p {
-  margin: 0;
-  font-size: 0.9rem;
-  cursor: pointer;
-  font-weight: 600;
-  padding: 8px 12px;
-  border: 1px solid #000;
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.5);
-  transition: all 0.2s;
-}
-
-.filter-list p:hover {
-  background: #000;
-  color: #fff;
-  border-color: #000;
+  background: transparent; /* Removed background */
+  color: #0056b3; /* Darker blue for active */
+  font-weight: 900; /* Bolder text for active */
+  border-bottom: 2px solid #0056b3; /* Blue underline for active */
+  border-radius: 0; /* Remove border-radius to make underline full width */
 }
 
 /* MAIN CONTENT */
 .main-content-area {
   display: flex;
   min-height: 600px;
-  padding: 25px;
+  padding: 25px 0;
   gap: 25px;
 }
-
-/* 側邊欄 */
-.sidebar {
-  width: 220px;
-  flex-shrink: 0;
-  background: #ffffff;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-}
-
-.sidebar-nav {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.sidebar-nav li {
-  padding: 12px 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s;
-  border-radius: 6px;
-  margin-bottom: 5px;
-}
-
-.sidebar-nav li:last-child {
-  border-bottom: none;
-}
-
-.sidebar-nav li:hover {
-  background: #f0f2f5;
-  color: #000;
-}
-
 
 .content-wrapper {
   flex-grow: 1;
@@ -281,7 +188,7 @@ html, body {
 .product-display {
   flex-grow: 1;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 25px;
 }
 
@@ -293,6 +200,7 @@ html, body {
   background: #fff;
   border-radius: 8px;
   overflow: hidden;
+  cursor: pointer; /* Added cursor pointer */
 }
 
 .product-card:hover {
@@ -608,7 +516,6 @@ html, body {
 
 /* 登入/註冊 */
 .login-container {
-  max-width: 450px;
   margin: 50px auto;
   border: 1px solid #e0e0e0;
   padding: 35px;
@@ -721,34 +628,22 @@ html, body {
 
 /* Desktop screens up to 1600px */
 @media (max-width: 1600px) {
-  #gk-shop {
-    width: 100%; /* Ensure full width */
-    max-width: 100%; /* Override any potentially conflicting max-width */
-    border: none; /* Remove the border */
-  }
+  /* Remove full width and border overrides if using inner containers */
 }
 
 /* New breakpoint for ultra-wide screens */
 @media (min-width: 1601px) {
-  #gk-shop {
-    max-width: 100%; /* Full width */
-    margin: 0; /* No auto margin, no centering */
-    border: none; /* No border */
-  }
-
-  .header-container {
-    max-width: 100%; /* Make header also full width */
-  }
-
+  /* Remove full width and border overrides if using inner containers */
   .main-content-area {
-    padding: 25px 15px; /* Adjust padding for full width content, keep top/bottom */
+    padding: 25px 0; /* Adjust padding for full width content, keep top/bottom */
   }
 }
 
 /* 小桌面/大筆電 (1200px) */
 @media (max-width: 1200px) {
-  #gk-shop {
-    max-width: 100%;
+  .header-inner-container,
+  .main-inner-container {
+    max-width: 960px;
   }
   .product-display {
     gap: 20px;
@@ -757,15 +652,16 @@ html, body {
 
 /* 平板/小筆電 (1024px) */
 @media (max-width: 1024px) {
-  #gk-shop {
-    border: none;
-  }
+  .main-header,
   .main-content-area {
-    padding: 20px;
-    gap: 20px;
+    padding: 20px 0;
+  }
+  .header-inner-container,
+  .main-inner-container {
+    padding: 0 15px; /* Adjust inner container padding for smaller screens */
   }
   .product-display {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 18px;
   }
   .nav-item {
@@ -783,7 +679,7 @@ html, body {
 
 /* 平板直式 (768px) */
 @media (max-width: 768px) {
-  .header-container {
+  .top-bar {
     flex-direction: column;
     gap: 15px;
   }
@@ -794,10 +690,6 @@ html, body {
   .main-content-area {
     flex-direction: column;
   }
-  .sidebar {
-    width: 100%;
-  }
-
   .product-display {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -815,11 +707,12 @@ html, body {
 
 /* 手機版 (480px) */
 @media (max-width: 480px) {
-  .main-content-area {
-    padding: 12px;
+  .header-inner-container,
+  .main-inner-container {
+    padding: 0 10px; /* Further adjust padding for mobile */
   }
-  .sidebar {
-    grid-template-columns: 1fr;
+  .main-content-area {
+    padding: 12px 0;
   }
   .product-display {
     grid-template-columns: 1fr;
