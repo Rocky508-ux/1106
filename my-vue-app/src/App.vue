@@ -2,10 +2,12 @@
 import { ref, reactive, computed } from 'vue';
 import ShoppingCart from './components/ShoppingCart.vue';
 import Login from './components/Login.vue';
+import SearchBar from './components/SearchBar.vue';
 
 const currentPage = ref('products');
 const isLoggedIn = ref(false);
 const selectedCategory = ref('');
+const searchQuery = ref('');
 const filter = ref('');
 const showTransactions = ref(false);
 const walletBalance = ref(15000);
@@ -40,9 +42,22 @@ const orders = ref([
 const cartItems = ref([]);
 
 const filteredProducts = computed(() => {
-  if (!selectedCategory.value) return products.value;
-  return products.value.filter(p => p.category === selectedCategory.value);
+  let result = products.value;
+
+  if (searchQuery.value) {
+    result = result.filter(p => p.name.toLowerCase().includes(searchQuery.value.toLowerCase()));
+  }
+
+  if (selectedCategory.value) {
+    result = result.filter(p => p.category === selectedCategory.value);
+  }
+
+  return result;
 });
+
+function handleSearch(query) {
+  searchQuery.value = query;
+}
 
 function handleLoginSuccess() {
   isLoggedIn.value = true;
@@ -90,7 +105,7 @@ function getStatusClass(status) {
           <div class="gk-title" @click="currentPage = 'products'" style="cursor: pointer;">
             <h1>RC玩童</h1>
           </div>
-          
+          <search-bar @search="handleSearch"></search-bar>
           <div class="auth-buttons">
             <button class="auth-btn cart-btn" @click="currentPage = 'cart'">🛒 購物車</button>
             <button class="auth-btn login-btn" v-if="!isLoggedIn" @click="currentPage = 'login'">登入</button>
