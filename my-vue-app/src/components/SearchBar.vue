@@ -29,27 +29,32 @@ const onSearch = () => {
 <style scoped>
 .search-bar {
   display: flex;
-  justify-content: center;
-  padding: 10px;
+  align-items: center;
+  gap: 8px; /* Added gap for spacing between input and button */
 }
-.search-bar input {
-  width: 400px;
-  padding: 10px;
+
+.search-bar input, .search-bar button {
+  padding: 12px 20px;
+  font-size: 18px;
+  font-weight: 700;
+  border-radius: 6px;
   border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 16px;
+  box-sizing: border-box;
 }
+
+.search-bar input {
+  width: 400px; /* You can adjust width as needed */
+}
+
 .search-bar button {
-  padding: 10px 15px;
-  margin-left: 8px;
-  border: none;
-  background-color: #333;
+  background: #4285F4; /* Match login button color */
   color: white;
-  border-radius: 4px;
   cursor: pointer;
-  font-size: 16px;
+  border-color: #4285F4;
+  transition: background-color 0.3s ease;
 }
+
 .search-bar button:hover {
-  background-color: #555;
+  background-color: #3367d6; /* Darker blue on hover */
 }
 </style>

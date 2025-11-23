@@ -8,9 +8,8 @@
 
 /* HEADER */
 .main-header {
-  border-bottom: 3px solid #000;
   padding: 15px 0;
-  background: rgba(255, 255, 255, 0.3);
+  background: #f0f2f5;
 }
 
 .header-inner-container {
@@ -139,8 +138,8 @@
 .nav-item {
   padding: 8px 20px;
   cursor: pointer;
-  font-weight: 700;
-  font-size: 0.95rem;
+  font-weight: bold;
+  font-size: 1.2rem;
   border: none;
   transition: all 0.3s;
   color: #000;
@@ -511,9 +510,9 @@
 /* 登入/註冊 */
 .login-container {
   margin: 50px auto;
-  border: 1px solid #e0e0e0;
   padding: 35px;
   background: #fff;
+  border: 1px solid #e0e0e0;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
@@ -592,12 +591,27 @@
   border-top: 3px solid #000;
   padding: 25px;
   text-align: center;
-  background: rgba(255, 255, 255, 0.3);
+  background: #f0f2f5;
 }
 
 .footer-links {
   margin-bottom: 12px;
 }
+.search-bar {
+  display: flex;
+  align-items: center; /* Vertically align items */
+}
+
+.search-bar input {
+  padding: 12px 20px;
+  font-size: 18px;
+  font-weight: 700;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  height: 51px; /* Match auth-btn height */
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
 
 .footer-links a {
   margin: 0 12px;

@@ -121,7 +121,6 @@ function getStatusClass(status) {
           <span class="nav-item" :class="{ active: currentPage === 'products' && filter === 'gk' }" @click="currentPage = 'products'; filter = 'gk'">GK模型</span>
           <span class="nav-item" :class="{ active: currentPage === 'products' && filter === 'blindbox' }" @click="currentPage = 'products'; filter = 'blindbox'">盒玩</span>
           <span class="nav-item" :class="{ active: currentPage === 'contact' }" @click="currentPage = 'contact'">聯絡我們</span>
-          <span class="nav-item" :class="{ active: currentPage === 'about' }" @click="currentPage = 'about'">關於我們</span>
         </nav>
       </div>
     </header>
@@ -181,11 +180,8 @@ function getStatusClass(status) {
             @back-to-products="currentPage = 'products'"
           ></shopping-cart>
         </section>
-        <section class="content-section" v-if="currentPage === 'login'">
-          <Login @login-success="handleLoginSuccess" />
-        </section>
-        <section class="content-section" v-if="currentPage === 'register'">
-          <div class="login-container">
+        <Login v-if="currentPage === 'login'" @login-success="handleLoginSuccess" />
+        <div class="login-container" v-if="currentPage === 'register'">
             <h2>會員註冊</h2>
             <form @submit.prevent="register" class="login-form">
               <div class="form-group">
@@ -216,7 +212,6 @@ function getStatusClass(status) {
               <p class="login-footer">已有帳號？ <a @click="currentPage = 'login'">立即登入</a></p>
             </form>
           </div>
-        </section>
         <section class="content-section" v-if="currentPage === 'contact'">
           <h2 class="section-title">聯絡我們</h2>
           <p>這是有關如何聯絡我們的資訊。</p>
