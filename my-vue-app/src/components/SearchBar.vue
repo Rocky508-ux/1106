@@ -3,7 +3,7 @@
     <input
       type="text"
       v-model="query"
-      @input="onInput"
+      @keyup.enter="onSearch"
       placeholder="搜尋產品..."
     />
     <button @click="onSearch">搜尋</button>
@@ -15,11 +15,6 @@ import { ref } from 'vue';
 
 const query = ref('');
 const emit = defineEmits(['search']);
-
-const onInput = () => {
-  // Emit search event on every input change for live search
-  emit('search', query.value);
-};
 
 const onSearch = () => {
   emit('search', query.value);

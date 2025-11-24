@@ -3,6 +3,8 @@ import { ref, reactive, computed } from 'vue';
 import ShoppingCart from './components/ShoppingCart.vue';
 import Login from './components/Login.vue';
 import SearchBar from './components/SearchBar.vue';
+import ProductList from './components/ProductList.vue';
+import ToastNotification from './components/ToastNotification.vue';
 
 const currentPage = ref('products');
 const isLoggedIn = ref(false);
@@ -11,6 +13,7 @@ const searchQuery = ref('');
 const filter = ref('');
 const showTransactions = ref(false);
 const walletBalance = ref(15000);
+const notifications = ref([]);
 
 const registerForm = reactive({
   name: '',
@@ -55,13 +58,21 @@ const filteredProducts = computed(() => {
   return result;
 });
 
+function addNotification(message) {
+  const id = Date.now();
+  notifications.value.push({ id, message });
+  setTimeout(() => {
+    notifications.value = notifications.value.filter(n => n.id !== id);
+  }, 3000);
+}
+
 function handleSearch(query) {
   searchQuery.value = query;
 }
 
 function handleLoginSuccess() {
   isLoggedIn.value = true;
-  currentPage.value = 'products';
+  navigateTo('products');
 }
 
 function register() {
@@ -69,18 +80,18 @@ function register() {
     alert('密碼不一致！');
     return;
   }
-  alert('註冊功能需串接後端 API');
-  currentPage.value = 'login';
+  addNotification('註冊功能需串接後端 API');
+  navigateTo('login');
 }
 
 function logout() {
   isLoggedIn.value = false;
-  currentPage.value = 'products';
+  navigateTo('products');
 }
 
 function addToCart(product) {
   cartItems.value.push(product);
-  alert(`已將 ${product.name} 加入購物車`);
+  addNotification(`已將 ${product.name} 加入購物車`);
 }
 
 function removeFromCart(productId) {
@@ -95,52 +106,50 @@ function getStatusClass(status) {
   };
   return map[status] || '';
 }
+
+function navigateTo(page, newFilter = '') {
+  currentPage.value = page;
+  filter.value = newFilter;
+  searchQuery.value = ''; // Reset search on navigation
+}
 </script>
 
 <template>
   <div id="gk-shop">
+    <ToastNotification :notifications="notifications" />
     <header class="main-header">
       <div class="header-inner-container">
         <div class="top-bar">
-          <div class="gk-title" @click="currentPage = 'products'" style="cursor: pointer;">
+          <div class="gk-title" @click="navigateTo('products')" style="cursor: pointer;">
             <h1>RC玩童</h1>
           </div>
           <search-bar @search="handleSearch"></search-bar>
           <div class="auth-buttons">
-            <button class="auth-btn cart-btn" @click="currentPage = 'cart'">🛒 購物車</button>
-            <button class="auth-btn login-btn" v-if="!isLoggedIn" @click="currentPage = 'login'">登入</button>
-            <button class="auth-btn register-btn" v-if="!isLoggedIn" @click="currentPage = 'register'">註冊</button>
+            <button class="auth-btn cart-btn" @click="navigateTo('cart')">🛒 購物車</button>
+            <button class="auth-btn login-btn" v-if="!isLoggedIn" @click="navigateTo('login')">登入</button>
+            <button class="auth-btn register-btn" v-if="!isLoggedIn" @click="navigateTo('register')">註冊</button>
             <button class="auth-btn logout-btn" v-else @click="logout">登出</button>
           </div>
         </div>
         
         <nav class="main-nav">
-          <span class="nav-item" :class="{ active: currentPage === 'products' && filter === 'new' }" @click="currentPage = 'products'; filter = 'new'">最新上架</span>
-          <span class="nav-item" :class="{ active: currentPage === 'products' && !filter }" @click="currentPage = 'products'; filter = ''">商品列表</span>
-          <span class="nav-item" :class="{ active: currentPage === 'products' && filter === 'prize' }" @click="currentPage = 'products'; filter = 'prize'">景品模型</span>
-          <span class="nav-item" :class="{ active: currentPage === 'products' && filter === 'gk' }" @click="currentPage = 'products'; filter = 'gk'">GK模型</span>
-          <span class="nav-item" :class="{ active: currentPage === 'products' && filter === 'blindbox' }" @click="currentPage = 'products'; filter = 'blindbox'">盒玩</span>
-          <span class="nav-item" :class="{ active: currentPage === 'contact' }" @click="currentPage = 'contact'">聯絡我們</span>
+          <span class="nav-item" :class="{ active: currentPage === 'products' && filter === 'new' }" @click="navigateTo('products', 'new')">最新上架</span>
+          <span class="nav-item" :class="{ active: currentPage === 'products' && !filter }" @click="navigateTo('products', '')">商品列表</span>
+          <span class="nav-item" :class="{ active: currentPage === 'products' && filter === 'prize' }" @click="navigateTo('products', 'prize')">景品模型</span>
+          <span class="nav-item" :class="{ active: currentPage === 'products' && filter === 'gk' }" @click="navigateTo('products', 'gk')">GK模型</span>
+          <span class="nav-item" :class="{ active: currentPage === 'products' && filter === 'blindbox' }" @click="navigateTo('products', 'blindbox')">盒玩</span>
+          <span class="nav-item" :class="{ active: currentPage === 'contact' }" @click="navigateTo('contact')">聯絡我們</span>
         </nav>
       </div>
     </header>
-
+    
     <main class="main-content-area">
       <!-- Product Page Layout -->
-      <div v-if="currentPage === 'products'" class="product-page-container">
-          <div class="product-card" v-for="product in filteredProducts" :key="product.id">
-            <div class="product-image-container">
-              <span class="product-tag">{{ product.tag }}</span>
-              <img :src="product.imageUrl" :alt="product.name">
-            </div>
-            <div class="product-info">
-              <p class="product-series">{{ product.series }}</p>
-              <h3 class="product-name">{{ product.name }}</h3>
-              <p class="product-price-range">NT$ {{ product.Price.toLocaleString() }}</p>
-              <button class="buy-btn" @click="addToCart(product)">加入購物車</button>
-            </div>
-          </div>
-      </div>
+      <product-list
+        v-if="currentPage === 'products'"
+        :products="filteredProducts"
+        @add-to-cart="addToCart"
+      ></product-list>
 
       <!-- Standalone Page Layout for all other pages -->
       <div v-else class="standalone-page-container">
@@ -176,8 +185,8 @@ function getStatusClass(status) {
             :cart-items="cartItems" 
             :is-logged-in="isLoggedIn"
             @remove-from-cart="removeFromCart"
-            @require-login="currentPage = 'login'"
-            @back-to-products="currentPage = 'products'"
+            @require-login="navigateTo('login')"
+            @back-to-products="navigateTo('products')"
           ></shopping-cart>
         </section>
         <Login v-if="currentPage === 'login'" @login-success="handleLoginSuccess" />
@@ -209,7 +218,7 @@ function getStatusClass(status) {
                 <input type="password" v-model="registerForm.confirmPassword" required>
               </div>
               <button type="submit" class="buy-btn">註冊</button>
-              <p class="login-footer">已有帳號？ <a @click="currentPage = 'login'">立即登入</a></p>
+              <p class="login-footer">已有帳號？ <a @click="navigateTo('login')">立即登入</a></p>
             </form>
           </div>
         <section class="content-section" v-if="currentPage === 'contact'">
