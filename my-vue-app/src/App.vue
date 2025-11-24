@@ -5,6 +5,11 @@ import Login from './components/Login.vue';
 import SearchBar from './components/SearchBar.vue';
 import ProductList from './components/ProductList.vue';
 import ToastNotification from './components/ToastNotification.vue';
+import Register from './components/Register.vue';
+import Orders from './components/Orders.vue';
+import Profile from './components/Profile.vue';
+import Contact from './components/Contact.vue';
+import About from './components/About.vue';
 
 const currentPage = ref('products');
 const isLoggedIn = ref(false);
@@ -14,15 +19,6 @@ const filter = ref('');
 const showTransactions = ref(false);
 const walletBalance = ref(15000);
 const notifications = ref([]);
-
-const registerForm = reactive({
-  name: '',
-  email: '',
-  phone: '',
-  birthday: '',
-  password: '',
-  confirmPassword: ''
-});
 
 const products = ref([
   { id: 1, name: '鋼彈 RX-78-2', Price: 3200, category: 'gundam', imageUrl: '/image/羅莉1.jpg', tag: '現貨', series: '機動戰士系列' },
@@ -75,15 +71,6 @@ function handleLoginSuccess() {
   navigateTo('products');
 }
 
-function register() {
-  if (registerForm.password !== registerForm.confirmPassword) {
-    alert('密碼不一致！');
-    return;
-  }
-  addNotification('註冊功能需串接後端 API');
-  navigateTo('login');
-}
-
 function logout() {
   isLoggedIn.value = false;
   navigateTo('products');
@@ -96,15 +83,6 @@ function addToCart(product) {
 
 function removeFromCart(productId) {
   cartItems.value = cartItems.value.filter(item => item.id !== productId);
-}
-
-function getStatusClass(status) {
-  const map = {
-    '已完成': 'status-completed',
-    '配送中': 'status-shipping',
-    '待付款': 'status-pending'
-  };
-  return map[status] || '';
 }
 
 function navigateTo(page, newFilter = '') {
@@ -153,33 +131,8 @@ function navigateTo(page, newFilter = '') {
 
       <!-- Standalone Page Layout for all other pages -->
       <div v-else class="standalone-page-container">
-        <section class="content-section" v-if="currentPage === 'profile'">
-          <h2 class="section-title">會員中心</h2>
-          <div class="extra-block">
-            <h4>會員資訊</h4>
-            <p v-if="isLoggedIn">歡迎回來！</p>
-            <p v-else>請先登入</p>
-          </div>
-        </section>
-        <section class="content-section" v-if="currentPage === 'orders'">
-          <h2 class="section-title">我的訂單</h2>
-          <div class="order-list">
-            <div class="order-item" v-for="order in orders" :key="order.id">
-              <div class="order-header">
-                <div>
-                  <h3>訂單編號: {{ order.id }}</h3>
-                  <p class="order-date">{{ order.date }}</p>
-                </div>
-                <span class="order-status" :class="getStatusClass(order.status)">
-                  {{ order.status }}
-                </span>
-              </div>
-              <div class="order-total">
-                總金額: <strong>NT$ {{ order.totalAmount.toLocaleString() }}</strong>
-              </div>
-            </div>
-          </div>
-        </section>
+        <Profile v-if="currentPage === 'profile'" :is-logged-in="isLoggedIn" />
+        <Orders v-if="currentPage === 'orders'" :orders="orders" />
         <section class="content-section" v-if="currentPage === 'cart'">
           <shopping-cart 
             :cart-items="cartItems" 
@@ -190,45 +143,13 @@ function navigateTo(page, newFilter = '') {
           ></shopping-cart>
         </section>
         <Login v-if="currentPage === 'login'" @login-success="handleLoginSuccess" />
-        <div class="login-container" v-if="currentPage === 'register'">
-            <h2>會員註冊</h2>
-            <form @submit.prevent="register" class="login-form">
-              <div class="form-group">
-                <label>姓名 <span style="color: red;">*</span></label>
-                <input type="text" v-model="registerForm.name" required>
-              </div>
-              <div class="form-group">
-                <label>電子郵件 <span style="color: red;">*</span></label>
-                <input type="email" v-model="registerForm.email" required>
-              </div>
-              <div class="form-group">
-                <label>手機 <span style="color: red;">*</span></label>
-                <input type="tel" v-model="registerForm.phone" required>
-              </div>
-              <div class="form-group">
-                <label>生日</label>
-                <input type="date" v-model="registerForm.birthday" required>
-              </div>
-              <div class="form-group">
-                <label>密碼 <span style="color: red;">*</span></label>
-                <input type="password" v-model="registerForm.password" required>
-              </div>
-              <div class="form-group">
-                <label>確認密碼 <span style="color: red;">*</span></label>
-                <input type="password" v-model="registerForm.confirmPassword" required>
-              </div>
-              <button type="submit" class="buy-btn">註冊</button>
-              <p class="login-footer">已有帳號？ <a @click="navigateTo('login')">立即登入</a></p>
-            </form>
-          </div>
-        <section class="content-section" v-if="currentPage === 'contact'">
-          <h2 class="section-title">聯絡我們</h2>
-          <p>這是有關如何聯絡我們的資訊。</p>
-        </section>
-        <section class="content-section" v-if="currentPage === 'about'">
-          <h2 class="section-title">關於我們</h2>
-          <p>這是關於我們公司的資訊。</p>
-        </section>
+        <Register 
+            v-if="currentPage === 'register'" 
+            @navigate-to-login="navigateTo('login')" 
+            @registration-notification="addNotification" 
+        />
+        <Contact v-if="currentPage === 'contact'" />
+        <About v-if="currentPage === 'about'" />
       </div>
     </main>
     <footer class="main-footer">
@@ -247,6 +168,7 @@ function navigateTo(page, newFilter = '') {
       </div>
     </footer>
   </div>
+
 </template>
 
-<style src="./App.css"></style>
+<style src="./assets/App.css"></style>

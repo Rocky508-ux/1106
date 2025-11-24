@@ -1,34 +1,7 @@
-<script setup>
-import { reactive, defineEmits } from 'vue';
-import { useRouter } from 'vue-router';
-
-const emit = defineEmits(['register-success']);
-const router = useRouter();
-
-const registerForm = reactive({
-  name: '',
-  email: '',
-  phone: '',
-  birthday: '',
-  password: '',
-  confirmPassword: ''
-});
-
-const register = () => {
-  if (registerForm.password !== registerForm.confirmPassword) {
-    alert('密碼不一致！');
-    return;
-  }
-  alert('註冊功能需串接後端 API');
-  emit('register-success'); // Emit event on successful registration (or after API call)
-  router.push('/login'); // Redirect to login page after registration
-};
-</script>
-
 <template>
-  <div class="login-container">
+  <div class="register-page-container">
     <h2>會員註冊</h2>
-    <form @submit.prevent="register" class="login-form">
+    <form @submit.prevent="register">
       <div class="form-group">
         <label>姓名 <span style="color: red;">*</span></label>
         <input type="text" v-model="registerForm.name" required>
@@ -53,20 +26,46 @@ const register = () => {
         <label>確認密碼 <span style="color: red;">*</span></label>
         <input type="password" v-model="registerForm.confirmPassword" required>
       </div>
-      <button type="submit" class="buy-btn">註冊</button>
-      <p class="login-footer">已有帳號？ <router-link to="/login">立即登入</router-link></p>
+      <button type="submit">註冊</button>
+      <p class="login-footer">已有帳號？ <a @click="$emit('navigate-to-login')">立即登入</a></p>
     </form>
   </div>
 </template>
 
+<script setup>
+import { reactive } from 'vue';
+
+const emit = defineEmits(['navigate-to-login', 'registration-notification']);
+
+const registerForm = reactive({
+  name: '',
+  email: '',
+  phone: '',
+  birthday: '',
+  password: '',
+  confirmPassword: ''
+});
+
+function register() {
+  if (registerForm.password !== registerForm.confirmPassword) {
+    alert('密碼不一致！');
+    return;
+  }
+  emit('registration-notification', '註冊功能需串接後端 API');
+  emit('navigate-to-login');
+}
+</script>
+
 <style scoped>
-.login-container {
-  max-width: 400px;
+.register-page-container {
+  width: 90%;
+  max-width: 500px;
   margin: 50px auto;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: #fff;
 }
 
 h2 {
@@ -113,6 +112,7 @@ button:hover {
 
 .login-footer a {
   color: #42b983;
+  cursor: pointer;
   text-decoration: none;
 }
 

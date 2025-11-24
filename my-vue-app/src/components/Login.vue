@@ -43,7 +43,7 @@ const handleLogin = async () => {
 </script>
 
 <template>
-  <div class="login-container">
+  <div class="login-page-container">
     <h2>登入</h2>
     <form @submit.prevent="handleLogin">
       <div class="form-group">
@@ -61,13 +61,15 @@ const handleLogin = async () => {
 </template>
 
 <style scoped>
-.login-container {
+.login-page-container {
+  width: 90%;
   max-width: 400px;
   margin: 50px auto;
-  padding: 20px;
+  padding: 40px 20px;
   border: 1px solid #ccc;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: #fff;
 }
 
 h2 {
