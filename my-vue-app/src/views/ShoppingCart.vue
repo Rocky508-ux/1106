@@ -3,14 +3,14 @@
     <h2>購物車</h2>
     <div v-if="!cartItems || cartItems.length === 0" class="cart-empty">
       <p>您的購物車是空的。</p>
-      <button @click="$emit('back-to-products')" class="back-to-shop-btn">繼續購物</button>
+      <router-link to="/" class="back-to-shop-btn">繼續購物</router-link>
     </div>
     <div v-else>
       <div class="cart-items-list">
         <div class="cart-item" v-for="item in cartItems" :key="item.id">
           <img :src="item.imageUrl" :alt="item.name" class="cart-item-image">
           <div class="cart-item-details">
-            <h4 class="cart-item-name">{{ item.name }}</h4>
+            <h4 class="cart-item-name">{{ item.name }} (x{{ item.quantity }})</h4>
             <p class="cart-item-series">{{ item.series }}</p>
             <p class="cart-item-price">NT$ {{ item.Price.toLocaleString() }}</p>
           </div>
@@ -30,6 +30,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { RouterLink } from 'vue-router';
 
 const props = defineProps({
   cartItems: {
@@ -43,11 +44,11 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(['remove-from-cart', 'require-login', 'back-to-products']);
+const emit = defineEmits(['remove-from-cart', 'require-login']);
 
 const totalPrice = computed(() => {
   if (!props.cartItems) return 0;
-  return props.cartItems.reduce((total, item) => total + item.Price, 0);
+  return props.cartItems.reduce((total, item) => total + (item.Price * item.quantity), 0);
 });
 
 const handleCheckout = () => {
@@ -63,10 +64,13 @@ const handleCheckout = () => {
 
 <style scoped>
 .cart-container {
+  max-width: 900px;
+  margin: 0 auto;
   padding: 2rem;
   background-color: #ffffff;
   border-radius: 12px;
   box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+  width: 50%;
 }
 
 h2 {
@@ -97,6 +101,8 @@ h2 {
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s;
+  display: inline-block;
+  text-decoration: none;
 }
 .back-to-shop-btn:hover {
   background-color: #0056b3;
@@ -207,3 +213,4 @@ h2 {
   background-color: #218838;
 }
 </style>
+

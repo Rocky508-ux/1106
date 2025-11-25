@@ -6,6 +6,12 @@
   color: #333;
 }
 
+/* 移除所有連結的底線 */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
 /* HEADER */
 .main-header {
   padding: 15px 0;
@@ -238,9 +244,14 @@
   box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
 
-.product-tag.預購 {
-    background-color: #fbbc05; 
-    color: #333;
+.product-tag[data-tag="預購"] {
+  background-color: #fbbc05 !important; /* Google Yellow */
+  color: #333 !important;
+}
+
+.product-tag[data-tag="現貨"] {
+  background-color: #34A853 !important; /* Google Green */
+  color: white !important;
 }
 
 
