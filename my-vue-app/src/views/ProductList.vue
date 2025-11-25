@@ -1,16 +1,14 @@
 <template>
-  <div class="product-page-container">
-    <template v-if="filteredProducts.length > 0">
-      <product-card
-        v-for="product in filteredProducts"
-        :key="product.id"
-        :product="product"
-        @add-to-cart="$emit('add-to-cart', $event)"
-      ></product-card>
-    </template>
-    <div v-else class="no-results">
-      <p>找不到符合條件的商品</p>
-    </div>
+  <template v-if="filteredProducts.length > 0">
+    <product-card
+      v-for="product in filteredProducts"
+      :key="product.id"
+      :product="product"
+      @add-to-cart="$emit('add-to-cart', $event)"
+    ></product-card>
+  </template>
+  <div v-else class="no-results">
+    <p>找不到符合條件的商品</p>
   </div>
 </template>
 
@@ -36,7 +34,7 @@ const filteredProducts = computed(() => {
   }
 
   // Navigation filters (mutually exclusive)
-  const tagType = route.query.tag; // '預購' or '現貨'
+  const tagType = route.query.tag; // '預購', '現貨', or 'new'
   const categoryType = route.query.category; // 'prize_blindbox'
 
   if (tagType) {
@@ -52,19 +50,3 @@ const filteredProducts = computed(() => {
   return currentProducts;
 });
 </script>
-
-<style scoped>
-.product-page-container {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-  padding: 2rem;
-}
-.no-results {
-  grid-column: 1 / -1;
-  text-align: center;
-  padding: 3rem;
-  font-size: 1.2rem;
-  color: #666;
-}
-</style>

@@ -8,13 +8,14 @@ const router = useRouter();
 const route = useRoute();
 
 // Global state that might be moved to Pinia later
-const isLoggedIn = ref(false);
+const isLoggedIn = ref(true);
 const notifications = ref([]);
 const cartItems = ref([]);
 
 // Manual active state computation
 const isPreorderActive = computed(() => route.fullPath === '/?tag=預購');
 const isInstockActive = computed(() => route.fullPath === '/?tag=現貨');
+const isNewActive = computed(() => route.fullPath === '/?tag=new');
 const isPrizeActive = computed(() => route.fullPath === '/?category=prize_blindbox');
 const isContactActive = computed(() => route.path === '/contact');
 
@@ -71,16 +72,17 @@ function logout() {
         </div>
         
         <nav class="main-nav">
+          <router-link to="/?tag=new" class="nav-item" :class="{ 'active': isNewActive }">最新上架</router-link>
           <router-link to="/?tag=預購" class="nav-item" :class="{ 'active': isPreorderActive }">預購商品</router-link>
           <router-link to="/?tag=現貨" class="nav-item" :class="{ 'active': isInstockActive }">現貨商品</router-link>
           <router-link to="/?category=prize_blindbox" class="nav-item" :class="{ 'active': isPrizeActive }">景品/盒玩</router-link>
           <router-link to="/contact" class="nav-item" :class="{ 'active': isContactActive }">聯絡我們</router-link>
+          <router-link to="/member-center" class="nav-item">會員中心</router-link>
         </nav>
       </div>
     </header>
     
-    <main class="main-content-area">
-      <!-- Router will render the correct page component here -->
+    <main :class="{'product-page-container': $route.path === '/', 'standalone-page-container': $route.path !== '/'}">
       <router-view 
         :is-logged-in="isLoggedIn"
         :cart-items="cartItems"
@@ -89,6 +91,7 @@ function logout() {
         @require-login="$router.push('/login')"
         @add-to-cart="addToCart"
         @remove-from-cart="removeFromCart"
+        @show-notification="addNotification"
       />
     </main>
 

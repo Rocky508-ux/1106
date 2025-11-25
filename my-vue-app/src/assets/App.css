@@ -169,20 +169,6 @@ a {
 }
 
 /* MAIN CONTENT */
-.main-content-area {
-  display: flex;
-  min-height: 600px;
-  padding: 25px 0;
-  gap: 25px;
-}
-
-/* New Content Wrappers */
-.product-content-wrapper {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 25px;
-  flex-grow: 1;
-}
 
 .standalone-content-wrapper {
   width: 50%;
@@ -251,6 +237,11 @@ a {
 
 .product-tag[data-tag="現貨"] {
   background-color: #34A853 !important; /* Google Green */
+  color: white !important;
+}
+
+.product-tag[data-tag="new"] {
+  background-color: #DB4437 !important; /* Google Red */
   color: white !important;
 }
 

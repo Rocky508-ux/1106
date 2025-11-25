@@ -56,6 +56,7 @@ const handleLogin = async () => {
       </div>
       <button type="submit">登入</button>
       <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
+      <p class="register-prompt">還沒有帳號嗎？<router-link to="/register">請先註冊</router-link></p>
     </form>
   </div>
 </template>
@@ -113,5 +114,22 @@ button:hover {
   color: red;
   margin-top: 15px;
   text-align: center;
+}
+
+.register-prompt {
+  text-align: center;
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+.register-prompt a {
+  color: #42b983;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.register-prompt a:hover {
+  text-decoration: underline;
 }
 </style>

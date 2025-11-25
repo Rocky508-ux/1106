@@ -6,9 +6,8 @@ export const products = ref([
     name: '鋼彈 RX-78-2', 
     Price: 3200, 
     category: 'gundam', 
-    imageUrl: '/image/羅莉1.jpg', 
-    tag: '現貨', 
-    series: '機動戰士系列',
+        imageUrl: '/image/羅莉1.jpg',
+        tag: 'new',    series: '機動戰士系列',
     description: '地球聯邦軍的泛用量產型機動戰士，V作戰的核心。',
     type: 'model'
   },
@@ -17,9 +16,7 @@ export const products = ref([
     name: 'ONE PIECE 魯夫', 
     Price: 2200, 
     category: 'onepiece', 
-    imageUrl: '/image/羅莉.jpg', 
-    tag: '預購', 
-    series: '海賊王系列',
+        tag: 'new',    series: '海賊王系列',
     description: '草帽海賊團的船長，夢想是找到傳說中的大秘寶「ONE PIECE」。',
     type: 'figure'
   },

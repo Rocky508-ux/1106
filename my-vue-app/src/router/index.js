@@ -9,6 +9,7 @@ import Profile from '../views/Profile.vue';
 import Orders from '../views/Orders.vue';
 import ShoppingCart from '../views/ShoppingCart.vue';
 import ProductDetail from '../views/ProductDetail.vue';
+import MemberCenter from '../views/MemberCenter.vue';
 
 const routes = [
   {
@@ -56,6 +57,11 @@ const routes = [
     name: 'ProductDetail',
     component: ProductDetail,
     props: true,
+  },
+  {
+    path: '/member-center',
+    name: 'MemberCenter',
+    component: MemberCenter,
   },
 ];
 
