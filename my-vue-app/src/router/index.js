@@ -10,6 +10,8 @@ import Orders from '../views/Orders.vue';
 import ShoppingCart from '../views/ShoppingCart.vue';
 import ProductDetail from '../views/ProductDetail.vue';
 import MemberCenter from '../views/MemberCenter.vue';
+import Admin from '../views/Admin.vue';
+import AdminLogin from '../views/AdminLogin.vue';
 
 const routes = [
   {
@@ -62,6 +64,24 @@ const routes = [
     path: '/member-center',
     name: 'MemberCenter',
     component: MemberCenter,
+  },
+  {
+    path: '/admin',
+    name: 'Admin',
+    component: Admin,
+    beforeEnter: (to, from, next) => {
+      const isAdminAuthenticated = localStorage.getItem('isAdminAuthenticated') === 'true';
+      if (isAdminAuthenticated) {
+        next();
+      } else {
+        next('/admin/login');
+      }
+    },
+  },
+  {
+    path: '/admin/login',
+    name: 'AdminLogin',
+    component: AdminLogin,
   },
 ];
 

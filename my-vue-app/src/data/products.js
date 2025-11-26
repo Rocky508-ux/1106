@@ -6,19 +6,23 @@ export const products = ref([
     name: '鋼彈 RX-78-2', 
     Price: 3200, 
     category: 'gundam', 
-        imageUrl: '/image/羅莉1.jpg',
-        tag: 'new',    series: '機動戰士系列',
+    imageUrl: '/image/羅莉1.jpg',
+    tag: 'new',
+    series: '機動戰士系列',
     description: '地球聯邦軍的泛用量產型機動戰士，V作戰的核心。',
-    type: 'model'
+    type: 'model',
+    stock: 15 
   },
   { 
     id: 'one-piece-luffy',
     name: 'ONE PIECE 魯夫', 
     Price: 2200, 
     category: 'onepiece', 
-        tag: 'new',    series: '海賊王系列',
+    tag: 'new',
+    series: '海賊王系列',
     description: '草帽海賊團的船長，夢想是找到傳說中的大秘寶「ONE PIECE」。',
-    type: 'figure'
+    type: 'figure',
+    stock: 25
   },
   { 
     id: 'naruto-uzumaki',
@@ -29,7 +33,8 @@ export const products = ref([
     tag: '現貨', 
     series: '疾風傳系列',
     description: '木葉忍者村的英雄，體內封印著九尾妖狐。',
-    type: 'figure'
+    type: 'figure',
+    stock: 10
   },
   { 
     id: 'pokemon-pikachu',
@@ -37,10 +42,10 @@ export const products = ref([
     Price: 2000, 
     category: 'pokemon', 
     imageUrl: '/image/pokemon_pika.jpg', 
-    // tag: '現貨', // Removed tag as per user request
     series: '精靈寶可夢',
     description: '小智最親密的夥伴，擅長使用十萬伏特。',
-    type: 'prize' // This is a prize figure
+    type: 'prize',
+    stock: 30
   },
   { 
     id: 'demon-slayer-tanjiro',
@@ -51,7 +56,8 @@ export const products = ref([
     tag: '現貨', 
     series: '柱系列',
     description: '為了讓變成鬼的妹妹復原而加入鬼殺隊的少年。',
-    type: 'figure'
+    type: 'figure',
+    stock: 12
   },
   { 
     id: 'aot-eren',
@@ -62,7 +68,8 @@ export const products = ref([
     tag: '預購', 
     series: '最終季',
     description: '追求自由的少年，擁有變身為進擊的巨人的能力。',
-    type: 'figure'
+    type: 'figure',
+    stock: 5
   },
   { 
     id: 'star-rail-yue',
@@ -73,7 +80,8 @@ export const products = ref([
     tag: '現貨', 
     series: 'Imagination 歌月君',
     description: '仙舟「羅浮」的持明族，丹鼎司的醫士。',
-    type: 'figure'
+    type: 'figure',
+    stock: 8
   },
   { 
     id: 'batman-prime1',
@@ -84,7 +92,8 @@ export const products = ref([
     tag: '預購', 
     series: 'Prime 1 Studio',
     description: '高譚市的黑暗騎士，以恐懼打擊罪犯。',
-    type: 'figure'
+    type: 'figure',
+    stock: 7
   },
   { 
     id: 'dbz-goku',
@@ -92,9 +101,9 @@ export const products = ref([
     Price: 3500, 
     category: 'dbz', 
     imageUrl: '/image/野獸.webp', 
-    // tag: '現貨', // Removed tag as per user request
     series: '超級賽亞人系列',
     description: '來自《七龍珠》的主角，傳說中的超級賽亞人。',
-    type: 'blindbox' // This is a blindbox item
+    type: 'blindbox',
+    stock: 20
   }
 ]);
