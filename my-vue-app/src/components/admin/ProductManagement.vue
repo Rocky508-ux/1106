@@ -2,20 +2,14 @@
   <div class="admin-card">
     <div class="header">
       <h1>商品管理</h1>
-      <button class="admin-btn add-btn" @click="openAddModal">新增商品</button>
+      <button class="add-btn admin-btn" @click="openAddModal">新增商品</button>
     </div>
     <div class="admin-table-wrapper">
       <table class="admin-table">
-        <colgroup>
-          <col style="width: 20%;" />
-          <col style="width: 30%;" />
-          <col style="width: 15%;" />
-          <col style="width: 10%;" />
-          <col style="width: 25%;" />
-        </colgroup>
         <thead>
           <tr>
             <th>ID</th>
+            <th>圖片</th>
             <th>名稱</th>
             <th>價格</th>
             <th>庫存</th>
@@ -24,17 +18,18 @@
         </thead>
         <tbody>
           <tr v-for="product in products" :key="product.id">
-            <td data-label="ID">{{ product.id }}</td>
-            <td data-label="名稱">{{ product.name }}</td>
-            <td data-label="價格">NT$ {{ product.price.toLocaleString() }}</td>
-            <td data-label="庫存">{{ product.stock }}</td>
-            <td data-label="操作" class="actions">
-              <button class="admin-btn edit-btn" @click="openEditModal(product)">編輯</button>
-              <button class="admin-btn delete-btn" @click="deleteProduct(product.id)">刪除</button>
+            <td>{{ product.id }}</td>
+            <td><img :src="product.image" alt="產品圖片" class="product-thumb"></td>
+            <td>{{ product.name }}</td>
+            <td>NT$ {{ product.price.toLocaleString() }}</td>
+            <td>{{ product.stock }}</td>
+            <td class="actions">
+              <button class="edit-btn admin-btn" @click="openEditModal(product)">編輯</button>
+              <button class="delete-btn admin-btn" @click="deleteProduct(product.id)">刪除</button>
             </td>
           </tr>
           <tr v-if="products.length === 0">
-            <td colspan="5" style="text-align: center; padding: 20px;">目前沒有商品</td>
+            <td colspan="6" style="text-align: center; padding: 20px;">目前沒有商品</td>
           </tr>
         </tbody>
       </table>
@@ -61,6 +56,14 @@
             <label for="description">描述:</label>
             <textarea id="description" v-model="editedProduct.description"></textarea>
           </div>
+          <div class="form-group">
+            <label for="image">圖片 URL:</label>
+            <input type="text" id="image" v-model="editedProduct.image" />
+            <div v-if="editedProduct.image" class="image-preview">
+              <p>預覽:</p>
+              <img :src="editedProduct.image" alt="圖片預覽" style="max-width: 100px; max-height: 100px;">
+            </div>
+          </div>
           <div class="modal-actions">
             <button type="button" class="admin-btn cancel-btn" @click="closeModal">取消</button>
             <button type="submit" class="admin-btn save-btn">儲存</button>
@@ -78,7 +81,6 @@ import { products } from '../../data/products.js';
 const showModal = ref(false);
 const isEditMode = ref(false);
 
-// Use `reactive` for objects that will have their properties modified in a form
 const editedProduct = reactive({
   id: null, name: '', price: 0, stock: 0, description: '', image: ''
 });
@@ -87,21 +89,19 @@ const generateUniqueId = () => 'prod-' + Date.now().toString(36) + Math.random()
 
 const openAddModal = () => {
   isEditMode.value = false;
-  // Reset the properties of the reactive object
   Object.assign(editedProduct, {
     id: null,
     name: '',
     price: 0,
     stock: 0,
     description: '',
-    image: 'https://via.placeholder.com/150',
+    image: 'https://via.placeholder.com/150', // Default placeholder image
   });
   showModal.value = true;
 };
 
 const openEditModal = (product) => {
   isEditMode.value = true;
-  // Copy the properties of the selected product into the reactive object
   Object.assign(editedProduct, product);
   showModal.value = true;
 };
@@ -110,7 +110,6 @@ const saveProduct = () => {
   if (isEditMode.value) {
     const index = products.value.findIndex(p => p.id === editedProduct.id);
     if (index !== -1) {
-      // Use Object.assign to update the existing reactive object in the array
       Object.assign(products.value[index], editedProduct);
     }
   } else {
@@ -137,12 +136,14 @@ const closeModal = () => {
 </script>
 
 <style scoped>
-@import '../../assets/admin-table.css';
+.product-thumb {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 4px;
+}
 
-/* Add any component-specific styles here if needed */
-[data-label="ID"] {
-  font-family: monospace;
-  font-size: 0.9em;
-  color: #555;
+.image-preview {
+  margin-top: 10px;
 }
 </style>

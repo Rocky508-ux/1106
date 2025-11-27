@@ -19,8 +19,10 @@
   background-color: var(--admin-bg-color);
   padding: 25px;
   border-radius: var(--admin-border-radius);
-  box-shadow: var(--admin-card-shadow);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  border: 1px solid #e9ecef;
   overflow-x: auto;
+  margin-bottom: 30px;
 }
 
 .admin-card .header {
@@ -30,11 +32,13 @@
   flex-wrap: wrap;
   gap: 15px;
   margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e9ecef;
 }
 
 .admin-card .header h1 {
   margin: 0;
-  font-size: 1.6em;
+  font-size: 1.5em;
   color: var(--admin-dark-color);
 }
 
@@ -46,29 +50,41 @@
 .admin-table {
   width: 100%;
   border-collapse: collapse;
-  table-layout: fixed; /* Crucial for preventing "broken" layouts */
-  white-space: nowrap;
+  /* table-layout: fixed; */ /* Removing fixed layout to allow natural column sizing */
 }
 
 .admin-table th,
 .admin-table td {
-  padding: 12px 15px;
+  padding: 14px 16px;
   text-align: left;
   vertical-align: middle;
-  border-bottom: 1px solid var(--admin-medium-gray-color);
-  white-space: normal; /* Allow text to wrap within cells */
-  word-break: break-word; /* Break long words if necessary */
+  border-bottom: 1px solid #e9ecef;
+  white-space: nowrap; /* Prevent wrapping in cells initially */
 }
 
+/* Allow specific columns to wrap */
+.admin-table td:nth-child(2), /* name */
+.admin-table td:nth-child(3) { /* description or email */
+  white-space: normal;
+  word-break: break-word;
+}
+
+
 .admin-table thead th {
-  background-color: var(--admin-light-gray-color);
+  background-color: #f8f9fa;
   font-weight: 600;
-  color: var(--admin-text-color);
-  white-space: nowrap; /* Keep headers on one line */
+  color: #495057;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.admin-table tbody tr:nth-of-type(even) {
+  background-color: #fcfdfe;
 }
 
 .admin-table tbody tr:hover {
-  background-color: #f9f9f9;
+  background-color: #f1f3f5;
 }
 
 .admin-table .actions {
@@ -81,27 +97,31 @@
 
 /* --- BUTTONS --- */
 .admin-btn {
-  padding: 8px 14px;
-  border: none;
-  border-radius: 4px;
+  padding: 7px 15px;
+  border: 1px solid transparent;
+  border-radius: 5px;
   cursor: pointer;
   white-space: nowrap;
   font-size: 14px;
-  transition: opacity 0.2s;
-  color: white;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
 .admin-btn:hover {
-  opacity: 0.85;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
-.add-btn { background-color: var(--admin-success-color); }
-.edit-btn { background-color: var(--admin-primary-color); }
-.delete-btn { background-color: var(--admin-danger-color); }
-.view-btn { background-color: #9b59b6; }
-.history-btn { background-color: var(--admin-info-color); }
-.disable-btn { background-color: var(--admin-warning-color); }
-.enable-btn { background-color: #27ae60; }
-.save-btn { background-color: var(--admin-primary-color); }
-.cancel-btn { background-color: var(--admin-dark-gray-color); }
+.add-btn { background-color: var(--admin-success-color); color: white; border-color: var(--admin-success-color); }
+.edit-btn { background-color: var(--admin-primary-color); color: white; border-color: var(--admin-primary-color); }
+.delete-btn { background-color: var(--admin-danger-color); color: white; border-color: var(--admin-danger-color); }
+.view-btn { background-color: #6f42c1; color: white; border-color: #6f42c1; }
+.history-btn { background-color: var(--admin-info-color); color: white; border-color: var(--admin-info-color); }
+.disable-btn { background-color: var(--admin-warning-color); color: white; border-color: var(--admin-warning-color); }
+.enable-btn { background-color: #20c997; color: white; border-color: #20c997; }
+.save-btn { background-color: var(--admin-primary-color); color: white; border-color: var(--admin-primary-color); }
+.cancel-btn { background-color: transparent; color: #6c757d; border-color: #6c757d; }
+.cancel-btn:hover { background-color: #6c757d; color: white; }
+
 
 /* --- STATUS & SELECT --- */
 .status-badge {
