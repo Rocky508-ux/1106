@@ -8,11 +8,11 @@
     <div v-else>
       <div class="cart-items-list">
         <div class="cart-item" v-for="item in cartItems" :key="item.id">
-          <img :src="item.imageUrl" :alt="item.name" class="cart-item-image">
+          <img :src="getProductImage(item)" :alt="item.name" class="cart-item-image">
           <div class="cart-item-details">
             <h4 class="cart-item-name">{{ item.name }} (x{{ item.quantity }})</h4>
             <p class="cart-item-series">{{ item.series }}</p>
-            <p class="cart-item-price">NT$ {{ item.Price.toLocaleString() }}</p>
+            <p class="cart-item-price">NT$ {{ item.price?.toLocaleString() }}</p>
           </div>
           <button @click="$emit('remove-from-cart', item.id)" class="remove-item-btn">✕</button>
         </div>
@@ -31,6 +31,8 @@
 <script setup>
 import { computed } from 'vue';
 import { RouterLink } from 'vue-router';
+// 引入圖片資料庫以查找對應圖片
+import { productImages } from '../data/productImages.js';
 
 const props = defineProps({
   cartItems: {
@@ -46,9 +48,21 @@ const props = defineProps({
 
 const emit = defineEmits(['remove-from-cart', 'require-login']);
 
+// 輔助函式：取得商品圖片
+const getProductImage = (item) => {
+  // 如果商品本身就有 imageUrl 就用它，否則去 productImages 查找
+  if (item.imageUrl) return item.imageUrl;
+  
+  const foundImage = productImages.value.find(
+    img => img.product_id === item.id && img.is_main
+  );
+  return foundImage ? foundImage.image_path : 'https://via.placeholder.com/100'; // 預設圖
+};
+
 const totalPrice = computed(() => {
   if (!props.cartItems) return 0;
-  return props.cartItems.reduce((total, item) => total + (item.Price * item.quantity), 0);
+  // 修正價格計算：Price -> price
+  return props.cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
 });
 
 const handleCheckout = () => {
@@ -70,7 +84,7 @@ const handleCheckout = () => {
   background-color: #ffffff;
   border-radius: 12px;
   box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-  width: 50%;
+  width: 50%; /* 配合您的 App.css 設定，若覺得太窄可在 RWD 調整 */
 }
 
 h2 {
@@ -129,6 +143,7 @@ h2 {
   height: 100px;
   object-fit: cover;
   border-radius: 8px;
+  background-color: #f8f8f8;
 }
 
 .cart-item-details {
@@ -213,4 +228,3 @@ h2 {
   background-color: #218838;
 }
 </style>
-

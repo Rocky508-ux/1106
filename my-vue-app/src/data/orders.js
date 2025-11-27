@@ -1,9 +1,10 @@
 import { ref } from 'vue';
 
-const initialOrders = [
+// 注意這裡必須是 "export const orders"，不能只有 "const orders"
+export const orders = ref([
   { 
     id: 'ORD001', 
-    userId: 'user-1',
+    userId: 1, // 對應到 users table id
     customer: '張三', 
     date: '2024-11-25', 
     amount: 5400, 
@@ -15,7 +16,7 @@ const initialOrders = [
   },
   { 
     id: 'ORD002', 
-    userId: 'user-2',
+    userId: 2,
     customer: '李四', 
     date: '2024-11-25', 
     amount: 2800, 
@@ -26,7 +27,7 @@ const initialOrders = [
   },
   { 
     id: 'ORD003', 
-    userId: 'user-1',
+    userId: 1,
     customer: '張三', 
     date: '2024-11-24', 
     amount: 4400, 
@@ -38,7 +39,7 @@ const initialOrders = [
   },
   { 
     id: 'ORD004', 
-    userId: 'user-3',
+    userId: 3,
     customer: '王五', 
     date: '2024-11-24', 
     amount: 2800, 
@@ -47,6 +48,4 @@ const initialOrders = [
       { productId: 'aot-eren', productName: '進擊的巨人 艾連', quantity: 1, price: 2800 },
     ]
   },
-];
-
-export const orders = ref(initialOrders);
+]);

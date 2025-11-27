@@ -13,27 +13,31 @@
           </span>
         </div>
         <div class="order-total">
-          總金額: <strong>NT$ {{ order.totalAmount.toLocaleString() }}</strong>
+          總金額: <strong>NT$ {{ order.amount.toLocaleString() }}</strong>
         </div>
+      </div>
+      <div v-if="!orders || orders.length === 0" style="text-align: center; padding: 20px; color: #666;">
+        目前沒有訂單紀錄
       </div>
     </div>
   </section>
 </template>
 
 <script setup>
-defineProps({
-  orders: {
-    type: Array,
-    required: true
-  }
-});
+import { orders } from '../data/orders.js';
 
 function getStatusClass(status) {
   const map = {
     '已完成': 'status-completed',
+    '已送達': 'status-completed',
+    '已出貨': 'status-shipping',
     '配送中': 'status-shipping',
+    '處理中': 'status-pending',
     '待付款': 'status-pending'
   };
   return map[status] || '';
 }
 </script>
+
+<style scoped>
+</style>

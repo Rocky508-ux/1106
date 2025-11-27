@@ -8,7 +8,9 @@ export const products = ref([
     price: 3200, 
     stock: 10,
     status: 'available',
-    category_id: 'gundam'
+    category_id: 'gundam',
+    tag: 'new',
+    type: 'model'
   },
   { 
     id: 'one-piece-luffy',
@@ -17,7 +19,9 @@ export const products = ref([
     price: 2200, 
     stock: 10,
     status: 'available',
-    category_id: 'onepiece'
+    category_id: 'onepiece',
+    tag: 'new',
+    type: 'figure'
   },
   { 
     id: 'naruto-uzumaki',
@@ -26,7 +30,9 @@ export const products = ref([
     price: 2800, 
     stock: 10,
     status: 'available',
-    category_id: 'naruto'
+    category_id: 'naruto',
+    tag: '現貨',
+    type: 'figure'
   },
   { 
     id: 'pokemon-pikachu',
@@ -35,7 +41,9 @@ export const products = ref([
     price: 2000, 
     stock: 10,
     status: 'available',
-    category_id: 'pokemon'
+    category_id: 'pokemon',
+    tag: null,
+    type: 'prize'
   },
   { 
     id: 'demon-slayer-tanjiro',
@@ -44,7 +52,9 @@ export const products = ref([
     price: 2400, 
     stock: 10,
     status: 'available',
-    category_id: 'other'
+    category_id: 'other',
+    tag: '現貨',
+    type: 'figure'
   },
   { 
     id: 'aot-eren',
@@ -53,7 +63,9 @@ export const products = ref([
     price: 2800, 
     stock: 10,
     status: 'available',
-    category_id: 'other'
+    category_id: 'other',
+    tag: '預購',
+    type: 'figure'
   },
   { 
     id: 'star-rail-yue',
@@ -62,7 +74,9 @@ export const products = ref([
     price: 16500, 
     stock: 10,
     status: 'available',
-    category_id: 'other'
+    category_id: 'other',
+    tag: '現貨',
+    type: 'figure'
   },
   { 
     id: 'batman-prime1',
@@ -71,7 +85,9 @@ export const products = ref([
     price: 4500, 
     stock: 10,
     status: 'available',
-    category_id: 'other'
+    category_id: 'other',
+    tag: '預購',
+    type: 'figure'
   },
   { 
     id: 'dbz-goku',
@@ -80,6 +96,8 @@ export const products = ref([
     price: 3500, 
     stock: 10,
     status: 'available',
-    category_id: 'dbz'
+    category_id: 'dbz',
+    tag: null,
+    type: 'blindbox'
   }
 ]);

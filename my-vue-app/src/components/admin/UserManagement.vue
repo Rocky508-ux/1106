@@ -41,7 +41,6 @@
       </table>
     </div>
 
-    <!-- User Add/Edit Modal -->
     <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
       <div class="modal-content">
         <h2>{{ isEditMode ? '編輯用戶' : '新增用戶' }}</h2>
@@ -66,7 +65,6 @@
       </div>
     </div>
 
-    <!-- Purchase History Modal -->
     <div v-if="showHistoryModal" class="modal-overlay" @click.self="closeHistoryModal">
       <div class="modal-content" style="max-width: 800px;">
         <h2>{{ selectedUser?.name }} 的購買紀錄</h2>
@@ -85,7 +83,9 @@
                 <td>{{ order.id }}</td>
                 <td>{{ order.date }}</td>
                 <td>NT$ {{ order.amount.toLocaleString() }}</td>
-                <td>{{ order.status }}</td>
+                <td>
+                  <span :class="['status-badge', order.status]">{{ order.status }}</span>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -101,8 +101,8 @@
 
 <script setup>
 import { ref, reactive, computed } from 'vue';
-import { users } from '../../data/users.js'; // Import centralized users data
-import { orders } from '../../data/orders.js'; // Import centralized orders data for history
+import { users } from '../../data/users.js'; 
+import { orders } from '../../data/orders.js'; 
 
 const showModal = ref(false);
 const isEditMode = ref(false);
@@ -183,11 +183,5 @@ const closeHistoryModal = () => {
 </script>
 
 <style scoped>
-/* Component-specific styles */
-.product-thumb {
-  width: 50px;
-  height: 50px;
-  object-fit: cover;
-  border-radius: 4px;
-}
+/* Removed unused styles */
 </style>

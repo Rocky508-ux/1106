@@ -40,7 +40,6 @@
       </table>
     </div>
 
-    <!-- Order Detail Modal -->
     <div v-if="showDetailModal" class="modal-overlay" @click.self="closeDetailModal">
       <div class="modal-content">
         <h2>訂單詳情 #{{ selectedOrder?.id }}</h2>
@@ -48,7 +47,7 @@
           <p><strong>顧客:</strong> {{ selectedOrder?.customer }}</p>
           <p><strong>日期:</strong> {{ selectedOrder?.date }}</p>
           <p><strong>總金額:</strong> NT$ {{ selectedOrder?.amount.toLocaleString() }}</p>
-          <p><strong>狀態:</strong> {{ selectedOrder?.status }}</p>
+          <p><strong>狀態:</strong> <span :class="['status-badge', selectedOrder?.status]">{{ selectedOrder?.status }}</span></p>
           <h3>訂購商品:</h3>
           <ul class="order-items-list">
             <li v-for="item in selectedOrder?.items" :key="item.productId">
@@ -91,6 +90,9 @@ const closeDetailModal = () => {
 .order-details p {
   margin: 8px 0;
   line-height: 1.6;
+  display: flex; /* Align items vertically */
+  align-items: center; /* Center badge vertically with text */
+  gap: 10px;
 }
 .order-details h3 {
   margin-top: 20px;

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { RouterLink, RouterView, useRouter, useRoute } from 'vue-router';
 import ToastNotification from './components/ToastNotification.vue';
 import SearchBar from './components/SearchBar.vue';
@@ -7,21 +7,58 @@ import SearchBar from './components/SearchBar.vue';
 const router = useRouter();
 const route = useRoute();
 
-// Global state that might be moved to Pinia later
-const isLoggedIn = ref(true);
+// Global state
+const isLoggedIn = ref(false); // 改為預設 false，等 checkAuth 確認
+const isAdmin = ref(false);    // 新增：判斷是否為管理員
 const notifications = ref([]);
 const cartItems = ref([]);
 
-// Manual active state computation
+// 導航列 Active 狀態判斷
 const isPreorderActive = computed(() => route.fullPath === '/?tag=預購');
 const isInstockActive = computed(() => route.fullPath === '/?tag=現貨');
 const isNewActive = computed(() => route.fullPath === '/?tag=new');
 const isPrizeActive = computed(() => route.fullPath === '/?category=prize_blindbox');
 const isContactActive = computed(() => route.path === '/contact');
 
+// ★★★ 檢查登入狀態與權限 (核心邏輯) ★★★
+function checkAuth() {
+  const token = localStorage.getItem('authToken');
+  const role = localStorage.getItem('userRole');
+  
+  isLoggedIn.value = !!token; // 有 token 就是已登入
+  isAdmin.value = role === 'ADMIN'; // role 是 ADMIN 才是管理員
+}
+
+// 畫面載入時，先檢查一次
+onMounted(() => {
+  checkAuth();
+});
+
+// 當 Login.vue 發出 login-success 事件時，重新檢查權限
+function handleLoginSuccess() {
+  checkAuth();
+}
+
+// 主內容容器 Class 計算
+const containerClass = computed(() => {
+  if (route.path === '/') {
+    return 'product-page-container';
+  } else if (route.path.startsWith('/admin')) {
+    return 'full-width-page-container';
+  } else {
+    return 'standalone-page-container';
+  }
+});
+
+// Header 內部容器 Class 計算
+const headerInnerClass = computed(() => {
+  if (route.path.startsWith('/admin')) {
+    return 'header-full-width';
+  }
+  return 'header-inner-container';
+});
 
 function handleSearch(query) {
-  // Use router query for search
   router.push({ path: '/', query: { search: query } });
 }
 
@@ -48,8 +85,16 @@ function removeFromCart(productId) {
 }
 
 function logout() {
+  // 清除所有相關資訊
+  localStorage.removeItem('authToken');
+  localStorage.removeItem('userRole');
+  localStorage.removeItem('userName');
+  
   isLoggedIn.value = false;
-  // No need to navigate, router state persists
+  isAdmin.value = false; // 清除管理員狀態
+  
+  router.push('/'); // 登出後回首頁
+  addNotification('已成功登出');
 }
 </script>
 
@@ -57,7 +102,7 @@ function logout() {
   <div id="gk-shop">
     <ToastNotification :notifications="notifications" />
     <header class="main-header">
-      <div class="header-inner-container">
+      <div :class="headerInnerClass">
         <div class="top-bar">
           <div class="gk-title">
             <router-link to="/"><h1>RC玩童</h1></router-link>
@@ -77,17 +122,19 @@ function logout() {
           <router-link to="/?tag=現貨" class="nav-item" :class="{ 'active': isInstockActive }">現貨商品</router-link>
           <router-link to="/?category=prize_blindbox" class="nav-item" :class="{ 'active': isPrizeActive }">景品/盒玩</router-link>
           <router-link to="/contact" class="nav-item" :class="{ 'active': isContactActive }">聯絡我們</router-link>
-          <router-link to="/member-center" class="nav-item">會員中心</router-link>
-          <router-link to="/admin" class="nav-item">管理者後台</router-link>
+          
+          <router-link v-if="isLoggedIn" to="/member-center" class="nav-item">會員中心</router-link>
+          
+          <router-link v-if="isAdmin" to="/admin" class="nav-item">管理者後台</router-link>
         </nav>
       </div>
     </header>
     
-    <main :class="{'product-page-container': $route.path === '/', 'standalone-page-container': $route.path !== '/'}">
+    <main :class="containerClass">
       <router-view 
         :is-logged-in="isLoggedIn"
         :cart-items="cartItems"
-        @login-success="isLoggedIn = true"
+        @login-success="handleLoginSuccess" 
         @registration-notification="addNotification"
         @require-login="$router.push('/login')"
         @add-to-cart="addToCart"

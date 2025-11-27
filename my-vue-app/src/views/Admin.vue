@@ -1,64 +1,3 @@
-<script>
-import ProductManagement from '../components/admin/ProductManagement.vue';
-import OrderManagement from '../components/admin/OrderManagement.vue';
-import UserManagement from '../components/admin/UserManagement.vue';
-
-export default {
-  name: 'Admin',
-  components: {
-    ProductManagement,
-    OrderManagement,
-    UserManagement
-  },
-  data() {
-    return {
-      activeSection: 'dashboard',
-      isSidebarOpen: false,
-      recentOrders: [
-        { id: 'ORD001', customer: '張三', date: '2024-11-25', amount: 1250, status: '已出貨' },
-        { id: 'ORD002', customer: '李四', date: '2024-11-25', amount: 800, status: '處理中' },
-        { id: 'ORD003', customer: '王五', date: '2024-11-24', amount: 3200, status: '已送達' },
-        { id: 'ORD004', customer: '趙六', date: '2024-11-24', amount: 500, status: '已取消' },
-      ]
-    };
-  },
-  computed: {
-    currentTitle() {
-      switch (this.activeSection) {
-        case 'dashboard': return '後台總覽';
-        case 'products': return '商品管理';
-        case 'orders': return '訂單管理';
-        case 'users': return '用戶管理';
-        default: return '後台管理';
-      }
-    },
-    activeView() {
-      switch (this.activeSection) {
-        case 'products': return 'ProductManagement';
-        case 'orders': return 'OrderManagement';
-        case 'users': return 'UserManagement';
-        default: return null;
-      }
-    }
-  },
-  methods: {
-    showSection(section) {
-      this.activeSection = section;
-       if (window.innerWidth <= 768) {
-        this.isSidebarOpen = false;
-      }
-    },
-    toggleSidebar() {
-      this.isSidebarOpen = !this.isSidebarOpen;
-    },
-    logout() {
-      console.log('Logout clicked');
-      this.$router.push('/admin/login');
-    }
-  }
-};
-</script>
-
 <template>
   <div class="admin-dashboard">
     <div v-if="isSidebarOpen" class="sidebar-overlay" @click="toggleSidebar"></div>
@@ -92,7 +31,7 @@ export default {
             </div>
             <div class="card">
               <h3>總訂單數</h3>
-              <p>5,432</p>
+              <p>{{ totalOrdersCount }}</p>
             </div>
             <div class="card">
               <h3>新用戶</h3>
@@ -127,15 +66,72 @@ export default {
             </div>
           </div>
         </div>
-        <!-- Use dynamic component to render the selected view -->
         <keep-alive>
-            <component :is="activeView" :key="activeSection" v-if="activeView" />
+            <component :is="activeViewComponent" :key="activeSection" v-if="activeSection !== 'dashboard'" />
         </keep-alive>
       </div>
     </main>
   </div>
 </template>
-      
+
+<script setup>
+import { ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
+import ProductManagement from '../components/admin/ProductManagement.vue';
+import OrderManagement from '../components/admin/OrderManagement.vue';
+import UserManagement from '../components/admin/UserManagement.vue';
+import { orders } from '../data/orders.js'; // 匯入共用的訂單資料
+
+const router = useRouter();
+
+const activeSection = ref('dashboard');
+const isSidebarOpen = ref(false);
+
+const currentTitle = computed(() => {
+  switch (activeSection.value) {
+    case 'dashboard': return '後台總覽';
+    case 'products': return '商品管理';
+    case 'orders': return '訂單管理';
+    case 'users': return '用戶管理';
+    default: return '後台管理';
+  }
+});
+
+const activeViewComponent = computed(() => {
+  switch (activeSection.value) {
+    case 'products': return ProductManagement;
+    case 'orders': return OrderManagement;
+    case 'users': return UserManagement;
+    default: return null;
+  }
+});
+
+// 使用共用的 orders 資料計算最近訂單
+const recentOrders = computed(() => {
+  // 複製一份陣列以免影響原始資料，反轉後取前 5 筆
+  return [...orders.value].reverse().slice(0, 5);
+});
+
+const totalOrdersCount = computed(() => orders.value.length.toLocaleString());
+
+const showSection = (section) => {
+  activeSection.value = section;
+  if (window.innerWidth <= 768) {
+    isSidebarOpen.value = false;
+  }
+};
+
+const toggleSidebar = () => {
+  isSidebarOpen.value = !isSidebarOpen.value;
+};
+
+const logout = () => {
+  // 清除登入狀態（如果有的話）
+  localStorage.removeItem('isAdminAuthenticated');
+  router.push('/admin/login');
+};
+</script>
+
 <style scoped>
 :root {
   --sidebar-width: 250px;
@@ -148,7 +144,7 @@ export default {
   background-color: #f4f6f9;
 }
 .sidebar {
-  width: var(--sidebar-width);
+  width: 250px;
   flex-shrink: 0;
   background-color: #2c3e50;
   color: #ecf0f1;
@@ -208,10 +204,10 @@ export default {
   background: #fff;
   padding: 0 20px;
   height: 60px;
+  display: flex; /* Ensure display flex for alignment */
   align-items: center;
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
   z-index: 10;
-  display: none; /* Hidden by default on desktop */
 }
 .hamburger-btn {
   font-size: 1.5rem;
@@ -219,6 +215,7 @@ export default {
   border: none;
   cursor: pointer;
   margin-right: 15px;
+  display: none; /* Hidden by default on desktop */
 }
 .main-header h1 { margin: 0; font-size: 1.5rem; }
 .content-area {
@@ -235,8 +232,8 @@ export default {
 .card {
   background-color: #fff;
   padding: 25px;
-  border-radius: var(--admin-border-radius);
-  box-shadow: var(--admin-card-shadow);
+  border-radius: 8px; /* Hardcoded or match var */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
   text-align: center;
 }
 .card h3 {
@@ -248,7 +245,7 @@ export default {
   margin: 0;
   font-size: 2em;
   font-weight: 600;
-  color: var(--admin-dark-color);
+  color: #2c3e50;
 }
 .recent-orders.admin-card {
   padding: 25px;
@@ -257,10 +254,6 @@ export default {
   margin-top: 0;
   margin-bottom: 20px;
 }
-.status-badge.處理中 { background-color: var(--admin-warning-color); }
-.status-badge.已出貨 { background-color: var(--admin-primary-color); }
-.status-badge.已送達 { background-color: var(--admin-success-color); }
-.status-badge.已取消 { background-color: var(--admin-danger-color); }
 
 /* Responsive (RWD) Styles */
 .sidebar-overlay {
@@ -274,6 +267,8 @@ export default {
     z-index: 1000;
 }
 @media (max-width: 768px) {
+  .main-header { display: flex; }
+  .hamburger-btn { display: block; }
   .sidebar {
     position: fixed;
     transform: translateX(-100%);
@@ -284,8 +279,6 @@ export default {
   .sidebar.is-open ~ .main-content .sidebar-overlay {
     display: block;
   }
-  .close-btn, .main-header {
-    display: flex;
-  }
+  .close-btn { display: block; }
 }
 </style>

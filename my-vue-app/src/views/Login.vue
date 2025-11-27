@@ -1,135 +1,196 @@
 <script setup>
 import { ref } from 'vue';
-import apiClient from '../services/api'; // 引入我們剛才建立的 api service
+import { useRouter } from 'vue-router';
 
-const emit = defineEmits(['login-success']);
+const router = useRouter();
+const emit = defineEmits(['login-success', 'show-notification']);
 
 const email = ref('');
 const password = ref('');
 const errorMessage = ref('');
 
 const handleLogin = async () => {
-  errorMessage.value = ''; // 重置錯誤訊息
+  errorMessage.value = '';
+  
   try {
-    // 向後端 /login 端點發送 POST 請求
-    const response = await apiClient.post('/login', {
-      email: email.value,
-      password: password.value,
-    });
+    // --- 模擬後端 API 回傳的邏輯 (之後接 Spring Boot 會真的發請求) ---
+    // 假設這是後端查完資料庫後回傳的結果
+    let mockResponse = {};
 
-    // 假設後端回傳的資料結構是 { token: '...' }
-    const token = response.data.token;
+    if (email.value === 'admin@rc.com' && password.value === 'admin123') {
+      // 情境 A: 管理員登入
+      mockResponse = {
+        token: 'admin-token-123',
+        user: { name: 'Admin User', role: 'ADMIN' }
+      };
+    } else if (email.value === 'user@example.com' && password.value === '123456') {
+      // 情境 B: 一般會員登入
+      mockResponse = {
+        token: 'user-token-456',
+        user: { name: '一般會員', role: 'USER' }
+      };
+    } else {
+      throw new Error('帳號或密碼錯誤');
+    }
+    // -----------------------------------------------------------
 
-    // 登入成功
-    console.log('登入成功，取得 Token:', token);
-    
-    // 將 Token 存到 localStorage
+    const { token, user } = mockResponse;
+
+    // 1. 儲存 Token 和使用者資訊
     localStorage.setItem('authToken', token);
+    localStorage.setItem('userRole', user.role); // 把身分存起來，方便之後檢查
+    localStorage.setItem('userName', user.name);
 
-    // 發出登入成功事件
+    // 2. 發出全域登入成功事件 (更新 App.vue 狀態)
     emit('login-success');
+    emit('show-notification', `歡迎回來，${user.name}！`);
+
+    // 3. 關鍵：根據身分導向不同頁面
+    if (user.role === 'ADMIN') {
+      console.log('偵測到管理員，前往後台...');
+      router.push('/admin'); // 管理員去後台
+    } else {
+      console.log('偵測到會員，前往首頁...');
+      router.push('/');      // 一般人去首頁
+    }
 
   } catch (error) {
-    // 處理登入失敗的情況
     console.error('登入失敗:', error);
-    if (error.response && error.response.data) {
-      // 顯示後端回傳的錯誤訊息
-      errorMessage.value = error.response.data.message || '登入失敗，請檢查您的帳號或密碼。';
-    } else {
-      errorMessage.value = '發生未知錯誤，請稍後再試。';
-    }
+    errorMessage.value = error.message || '登入失敗，請稍後再試。';
   }
 };
 </script>
 
 <template>
-  <div class="login-page-container">
-    <h2>登入</h2>
-    <form @submit.prevent="handleLogin">
+  <div class="login-container">
+    <h2>會員登入</h2>
+    <form @submit.prevent="handleLogin" class="login-form">
       <div class="form-group">
-        <label for="email">Email:</label>
-        <input type="email" id="email" v-model="email" required />
+        <label for="email">Email</label>
+        <input type="email" id="email" v-model="email" placeholder="admin@rc.com" required />
       </div>
       <div class="form-group">
-        <label for="password">密碼:</label>
-        <input type="password" id="password" v-model="password" required />
+        <label for="password">密碼</label>
+        <input type="password" id="password" v-model="password" placeholder="admin123" required />
       </div>
-      <button type="submit">登入</button>
+      <button type="submit" class="buy-btn" style="width: 100%;">登入</button>
       <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
-      <p class="register-prompt">還沒有帳號嗎？<router-link to="/register">請先註冊</router-link></p>
+      <p class="login-footer">還沒有帳號嗎？<router-link to="/register">立即註冊</router-link></p>
     </form>
+    
+    <div class="dev-hint">
+      <p><strong>測試帳號：</strong></p>
+      <p>管理員: admin@rc.com / admin123</p>
+      <p>會員: user@example.com / 123456</p>
+    </div>
   </div>
 </template>
 
 <style scoped>
-.login-page-container {
+/* 參考註冊頁面的清新風格進行調整 */
+.login-container {
   width: 90%;
-  max-width: 400px;
+  max-width: 500px; /* 縮小最大寬度，對齊註冊頁面 */
   margin: 50px auto;
-  padding: 40px 20px;
-  border: 1px solid #ccc;
+  padding: 30px; /* 調整內距 */
+  border: 1px solid #e0e0e0; /* 更淡的邊框 */
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* 更柔和的陰影 */
   background: #fff;
 }
 
 h2 {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
+  font-size: 1.5rem;
+  color: #333;
+  font-weight: 700;
 }
 
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 .form-group label {
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #555;
+  font-size: 0.95rem;
 }
 
 .form-group input {
   width: 100%;
-  padding: 8px;
+  padding: 10px 12px;
   box-sizing: border-box;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.form-group input:focus {
+  border-color: #4285F4;
+  outline: none;
 }
 
 button {
   width: 100%;
-  padding: 10px;
-  background-color: #42b983;
+  padding: 12px;
+  background-color: #4285F4; /* 維持藍色 */
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 1rem;
+  font-weight: 700;
+  transition: background-color 0.3s, transform 0.2s;
+  margin-top: 10px;
 }
 
 button:hover {
-  background-color: #369f72;
+  background-color: #3367d6;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 5px rgba(66, 133, 244, 0.3);
 }
 
 .error-message {
-  color: red;
-  margin-top: 15px;
-  text-align: center;
-}
-
-.register-prompt {
+  color: #d93025;
   text-align: center;
   margin-top: 15px;
-  font-weight: bold;
+  font-size: 0.9rem;
+  background-color: #fce8e6;
+  padding: 8px;
+  border-radius: 4px;
 }
 
-.register-prompt a {
-  color: #42b983;
+.login-footer {
+  text-align: center;
+  margin-top: 20px;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.login-footer a {
+  color: #42b983; /* 配合註冊頁面的綠色連結 */
   cursor: pointer;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 700;
+  margin-left: 5px;
 }
 
-.register-prompt a:hover {
+.login-footer a:hover {
   text-decoration: underline;
+}
+
+.dev-hint {
+  margin-top: 25px;
+  font-size: 0.85rem;
+  color: #666;
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 6px;
+  border: 1px solid #eee;
+  line-height: 1.6;
 }
 </style>

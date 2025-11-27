@@ -1,6 +1,10 @@
 <template>
   <div class="product-card" @click="navigateToDetail">
     <div class="product-image-container">
+      <span v-if="product.tag" class="product-tag" :data-tag="product.tag">
+        {{ getTagLabel(product.tag) }}
+      </span>
+
       <img v-if="mainImage" :src="mainImage" :alt="product.name">
       <div v-else class="placeholder-image">Image not available</div>
     </div>
@@ -30,6 +34,12 @@ defineEmits(['add-to-cart']);
 
 const router = useRouter();
 
+// 轉換顯示文字 (例如資料庫存 'new' 但你想顯示 'NEW!')
+const getTagLabel = (tag) => {
+  if (tag === 'new') return 'NEW';
+  return tag; // '預購' 和 '現貨' 直接顯示
+};
+
 // Find the main image for this product
 const mainImage = computed(() => {
   const image = productImages.value.find(
@@ -54,6 +64,7 @@ function navigateToDetail() {
   border-radius: 8px;
   overflow: hidden;
   cursor: pointer;
+  position: relative; /* 確保子元素定位正確 */
 }
 
 .product-card:hover {
@@ -82,18 +93,26 @@ function navigateToDetail() {
   transform: scale(1.05);
 }
 
+/* ★★★ 標籤樣式補充 (主要顏色邏輯在 App.css) ★★★ */
+.product-tag {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  z-index: 10;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
 .product-info {
   padding: 15px;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-}
-
-.product-series {
-  font-size: 0.85rem;
-  color: #777;
-  margin-bottom: 5px;
-  font-weight: 500;
 }
 
 .product-name {
