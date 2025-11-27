@@ -1,14 +1,13 @@
 <template>
   <div class="product-card" @click="navigateToDetail">
     <div class="product-image-container">
-      <span v-if="product.tag" class="product-tag" :data-tag="product.tag">{{ product.tag }}</span>
-      <img :src="product.imageUrl" :alt="product.name">
+      <img v-if="mainImage" :src="mainImage" :alt="product.name">
+      <div v-else class="placeholder-image">Image not available</div>
     </div>
     <div class="product-info">
-      <p class="product-series">{{ product.series }}</p>
       <h3 class="product-name">{{ product.name }}</h3>
       <div class="product-actions">
-        <p class="product-price-range">NT$ {{ product.Price.toLocaleString() }}</p>
+        <p class="product-price-range">NT$ {{ product.price.toLocaleString() }}</p>
         <button class="buy-btn" @click.stop="$emit('add-to-cart', product)">加入購物車</button>
       </div>
     </div>
@@ -16,7 +15,9 @@
 </template>
 
 <script setup>
+import { computed } from 'vue';
 import { useRouter } from 'vue-router';
+import { productImages } from '../data/productImages.js';
 
 const props = defineProps({
   product: {
@@ -28,6 +29,14 @@ const props = defineProps({
 defineEmits(['add-to-cart']);
 
 const router = useRouter();
+
+// Find the main image for this product
+const mainImage = computed(() => {
+  const image = productImages.value.find(
+    img => img.product_id === props.product.id && img.is_main
+  );
+  return image ? image.image_path : null;
+});
 
 function navigateToDetail() {
   router.push('/product/' + props.product.id);

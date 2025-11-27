@@ -78,7 +78,7 @@ function logout() {
           <router-link to="/?category=prize_blindbox" class="nav-item" :class="{ 'active': isPrizeActive }">景品/盒玩</router-link>
           <router-link to="/contact" class="nav-item" :class="{ 'active': isContactActive }">聯絡我們</router-link>
           <router-link to="/member-center" class="nav-item">會員中心</router-link>
-          <router-link to="/admin" class="nav-item">管理者</router-link>
+          <router-link to="/admin" class="nav-item">管理者後台</router-link>
         </nav>
       </div>
     </header>
@@ -98,7 +98,7 @@ function logout() {
 
     <footer class="main-footer">
       <div class="footer-links">
-        <router-link to="/about">關於我們</router-link> | 
+        <router-link to="/about">關於我們1</router-link> | 
         <router-link to="/contact">聯絡我們</router-link> | 
         <router-link to="/orders">訂單查詢</router-link> | 
         <a href="#">售後服務</a> |

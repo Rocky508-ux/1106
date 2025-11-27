@@ -145,7 +145,6 @@ export default {
 table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 900px; /* Ensure a minimum width for the table */
 }
 th, td {
   border: 1px solid #ddd;
@@ -165,8 +164,16 @@ th:nth-child(2), td:nth-child(2) { min-width: 120px; } /* Customer */
 th:nth-child(3), td:nth-child(3) { min-width: 120px; } /* Date */
 th:nth-child(4), td:nth-child(4) { min-width: 120px; } /* Amount */
 th:nth-child(5), td:nth-child(5) { min-width: 120px; } /* Status */
-th:nth-child(6), td:nth-child(6) { min-width: 150px; } /* Actions */
+th:nth-child(6), td:nth-child(6) { } /* Actions */
 
+
+.actions {
+  display: flex;
+  justify-content: center; /* Center the button */
+  align-items: center;
+  width: 100%; /* Ensure it takes full width of the cell */
+  gap: 8px; /* Add spacing if multiple buttons are introduced later */
+}
 
 .actions button {
   padding: 6px 12px; /* Adjusted padding */

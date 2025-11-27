@@ -6,12 +6,6 @@
   color: #333;
 }
 
-/* 移除所有連結的底線 */
-a {
-  text-decoration: none;
-  color: inherit;
-}
-
 /* HEADER */
 .main-header {
   padding: 15px 0;
@@ -169,6 +163,20 @@ a {
 }
 
 /* MAIN CONTENT */
+.main-content-area {
+  display: flex;
+  min-height: 600px;
+  padding: 25px 0;
+  gap: 25px;
+}
+
+/* New Content Wrappers */
+.product-content-wrapper {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 25px;
+  flex-grow: 1;
+}
 
 .standalone-content-wrapper {
   width: 50%;
@@ -230,19 +238,9 @@ a {
   box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
 
-.product-tag[data-tag="預購"] {
-  background-color: #fbbc05 !important; /* Google Yellow */
-  color: #333 !important;
-}
-
-.product-tag[data-tag="現貨"] {
-  background-color: #34A853 !important; /* Google Green */
-  color: white !important;
-}
-
-.product-tag[data-tag="new"] {
-  background-color: #DB4437 !important; /* Google Red */
-  color: white !important;
+.product-tag.預購 {
+    background-color: #fbbc05; 
+    color: #333;
 }
 
 

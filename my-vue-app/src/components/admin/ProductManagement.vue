@@ -12,7 +12,7 @@
             <th>名稱</th>
             <th>價格</th>
             <th>庫存</th>
-            <th>分類</th>
+            <th>分類 ID</th>
             <th>操作</th>
           </tr>
         </thead>
@@ -20,9 +20,9 @@
           <tr v-for="product in products" :key="product.id">
             <td>{{ product.id }}</td>
             <td>{{ product.name }}</td>
-            <td>NT$ {{ product.Price.toLocaleString() }}</td>
+            <td>NT$ {{ product.price.toLocaleString() }}</td>
             <td>{{ product.stock }}</td>
-            <td>{{ product.category }}</td>
+            <td>{{ product.category_id }}</td>
             <td class="actions">
               <button class="edit-btn" @click="openEditModal(product)">編輯</button>
               <button class="delete-btn" @click="deleteProduct(product.id)">刪除</button>
@@ -42,43 +42,19 @@
             </div>
             <div class="form-group">
               <label for="price">價格:</label>
-              <input type="number" id="price" v-model="editedProduct.Price" required />
+              <input type="number" id="price" v-model.number="editedProduct.price" required />
             </div>
             <div class="form-group">
               <label for="stock">庫存:</label>
               <input type="number" id="stock" v-model.number="editedProduct.stock" required />
             </div>
             <div class="form-group">
-              <label for="category">分類:</label>
-              <input type="text" id="category" v-model="editedProduct.category" required />
-            </div>
-            <div class="form-group">
-              <label for="imageUpload">商品圖片:</label>
-              <input type="file" id="imageUpload" @change="handleImageUpload" accept="image/*" />
-              <div v-if="imagePreviewUrl" class="image-preview">
-                <p>預覽:</p>
-                <img :src="imagePreviewUrl" alt="Image Preview" />
-              </div>
-              <div v-else-if="isEditMode && editedProduct.imageUrl" class="image-preview">
-                <p>目前圖片:</p>
-                <img :src="editedProduct.imageUrl" alt="Current Image" />
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="tag">標籤:</label>
-              <input type="text" id="tag" v-model="editedProduct.tag" />
-            </div>
-            <div class="form-group">
-              <label for="series">系列:</label>
-              <input type="text" id="series" v-model="editedProduct.series" />
+              <label for="category_id">分類 ID:</label>
+              <input type="text" id="category_id" v-model="editedProduct.category_id" required />
             </div>
             <div class="form-group">
               <label for="description">描述:</label>
               <textarea id="description" v-model="editedProduct.description"></textarea>
-            </div>
-            <div class="form-group">
-              <label for="type">類型:</label>
-              <input type="text" id="type" v-model="editedProduct.type" />
             </div>
             <div class="modal-actions">
               <button type="submit" class="save-btn">儲存</button>
@@ -105,8 +81,6 @@ export default {
       showModal: false,
       isEditMode: false,
       editedProduct: {},
-      imagePreviewUrl: null,
-      imageFile: null,
     };
   },
   methods: {
@@ -118,39 +92,20 @@ export default {
       this.editedProduct = {
         id: null,
         name: '',
-        Price: 0,
+        price: 0,
         stock: 0,
-        category: '',
-        imageUrl: '',
-        tag: '',
-        series: '',
+        category_id: '',
         description: '',
-        type: '',
+        status: 'available', // Default status
       };
-      this.imagePreviewUrl = null;
-      this.imageFile = null;
       this.showModal = true;
     },
     openEditModal(product) {
       this.isEditMode = true;
       this.editedProduct = { ...product };
-      this.imagePreviewUrl = null;
-      this.imageFile = null;
       this.showModal = true;
     },
-    handleImageUpload(event) {
-      const file = event.target.files[0];
-      if (file) {
-        this.imageFile = file;
-        this.imagePreviewUrl = URL.createObjectURL(file);
-      }
-    },
     saveProduct() {
-      // If a new image was selected, its blob URL is used for the display
-      if (this.imagePreviewUrl) {
-          this.editedProduct.imageUrl = this.imagePreviewUrl;
-      }
-
       if (this.isEditMode) {
         const index = this.products.findIndex(p => p.id === this.editedProduct.id);
         if (index !== -1) {
@@ -166,41 +121,18 @@ export default {
       if (confirm('確定要刪除此商品嗎？')) {
         const index = this.products.findIndex(p => p.id === productId);
         if (index !== -1) {
-          // If the image was a blob, revoke its URL to free up memory
-          const product = this.products[index];
-          if (product.imageUrl && product.imageUrl.startsWith('blob:')) {
-            URL.revokeObjectURL(product.imageUrl);
-          }
           this.products.splice(index, 1);
         }
       }
     },
     closeModal() {
-      // Revoke the blob URL when the modal is closed to prevent memory leaks
-      if (this.imagePreviewUrl) {
-        URL.revokeObjectURL(this.imagePreviewUrl);
-      }
       this.showModal = false;
     }
-  },
-  beforeUnmount() {
-    // Clean up any remaining blob URLs when the component is destroyed
-    this.products.forEach(product => {
-      if (product.imageUrl && product.imageUrl.startsWith('blob:')) {
-        URL.revokeObjectURL(product.imageUrl);
-      }
-    });
   }
 };
 </script>
 
 <style scoped>
-.content-wrapper {
-  max-width: 1600px;
-  margin: 0 auto;
-  width: 100%;
-}
-
 .product-management {
 
   padding: 20px;
@@ -251,8 +183,6 @@ table {
 
   border-collapse: collapse;
 
-  min-width: 1000px; /* Ensure a minimum width for the table */
-
 }
 
 
@@ -295,7 +225,7 @@ th:nth-child(4), td:nth-child(4) { min-width: 80px; }  /* Stock */
 
 th:nth-child(5), td:nth-child(5) { min-width: 120px; } /* Category */
 
-th:nth-child(6), td:nth-child(6) { min-width: 200px; } /* Actions - ensure enough space for buttons */
+th:nth-child(6), td:nth-child(6) { } /* Actions - ensure enough space for buttons */
 
 
 
@@ -305,11 +235,15 @@ th:nth-child(6), td:nth-child(6) { min-width: 200px; } /* Actions - ensure enoug
 
   display: flex;
 
-  flex-wrap: nowrap; /* Prevent buttons from wrapping to next line */
+  flex-wrap: nowrap;
 
-  gap: 8px; /* Space between buttons */
+  gap: 8px;
 
   align-items: center;
+
+  justify-content: center; /* Center the buttons */
+
+  width: 100%; /* Ensure it takes full width of the cell */
 
 }
 

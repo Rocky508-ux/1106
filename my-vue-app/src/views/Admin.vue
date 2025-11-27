@@ -156,7 +156,7 @@ export default {
       }
       .logout-btn:hover { background-color: #c0392b; }
       .sidebar-overlay { display: none; }
-      .main-content { flex-grow: 1; background-color: #f4f6f9; display: flex; flex-direction: column; }
+      .main-content { flex-grow: 1; background-color: #f4f6f9; display: flex; flex-direction: column; min-width: 0; }
       .main-header {
         display: none; background: #fff; padding: 0 20px; height: 60px;
         align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); z-index: 10;

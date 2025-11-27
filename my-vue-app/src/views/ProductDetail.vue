@@ -1,9 +1,9 @@
 <template>
   <div v-if="product" class="product-detail-container">
     <h1>{{ product.name }}</h1>
-    <img :src="product.imageUrl" :alt="product.name" class="product-image" />
+    <img v-if="mainImage" :src="mainImage" :alt="product.name" class="product-image" />
     <p class="product-description">{{ product.description }}</p>
-    <p class="product-price">價格: NT$ {{ product.Price.toLocaleString() }}</p>
+    <p class="product-price">價格: NT$ {{ product.price.toLocaleString() }}</p>
     <router-link to="/" class="back-link">返回商品列表</router-link>
   </div>
   <div v-else class="not-found">
@@ -17,6 +17,7 @@
 import { computed } from 'vue';
 import { RouterLink } from 'vue-router';
 import { products } from '../data/products.js';
+import { productImages } from '../data/productImages.js';
 
 const props = defineProps({
   id: {
@@ -28,6 +29,15 @@ const props = defineProps({
 // Find the product from the shared list based on the route's id prop
 const product = computed(() => {
   return products.value.find(p => p.id === props.id);
+});
+
+// Find the main image for this product
+const mainImage = computed(() => {
+  if (!product.value) return null;
+  const image = productImages.value.find(
+    img => img.product_id === product.value.id && img.is_main
+  );
+  return image ? image.image_path : null;
 });
 </script>
 

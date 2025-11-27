@@ -196,15 +196,8 @@ export default {
 </script>
 
 <style scoped>
-.content-wrapper {
-  max-width: 1600px;
-  margin: 0 auto;
-  width: 100%;
-}
-
 .user-management {
   padding: 20px;
-  overflow-x: auto; /* Allow horizontal scrolling if table is too wide */
 }
 
 .header {
@@ -227,7 +220,6 @@ export default {
 table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 1000px; /* Minimum table width to prevent excessive cramping */
 }
 
 th, td {
@@ -248,7 +240,7 @@ th:nth-child(2), td:nth-child(2) { min-width: 100px; } /* Name */
 th:nth-child(3), td:nth-child(3) { min-width: 180px; word-break: break-all; } /* Email */
 th:nth-child(4), td:nth-child(4) { min-width: 120px; } /* Date */
 th:nth-child(5), td:nth-child(5) { min-width: 90px; text-align: center; } /* Status */
-th:nth-child(6), td:nth-child(6) { min-width: 380px; } /* Actions - increased width */
+th:nth-child(6), td:nth-child(6) { } /* Actions - increased width */
 
 
 .actions {
@@ -256,6 +248,8 @@ th:nth-child(6), td:nth-child(6) { min-width: 380px; } /* Actions - increased wi
   flex-wrap: nowrap; /* Ensure buttons stay in a single line */
   gap: 8px; /* Spacing between buttons */
   align-items: center;
+  justify-content: center; /* Center the buttons */
+  width: 100%; /* Ensure it takes full width of the cell */
 }
 
 .actions button {

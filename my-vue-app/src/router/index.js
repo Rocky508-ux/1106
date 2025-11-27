@@ -69,14 +69,6 @@ const routes = [
     path: '/admin',
     name: 'Admin',
     component: Admin,
-    beforeEnter: (to, from, next) => {
-      const isAdminAuthenticated = localStorage.getItem('isAdminAuthenticated') === 'true';
-      if (isAdminAuthenticated) {
-        next();
-      } else {
-        next('/admin/login');
-      }
-    },
   },
   {
     path: '/admin/login',

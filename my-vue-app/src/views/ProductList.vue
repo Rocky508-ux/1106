@@ -33,19 +33,8 @@ const filteredProducts = computed(() => {
     );
   }
 
-  // Navigation filters (mutually exclusive)
-  const tagType = route.query.tag; // '預購', '現貨', or 'new'
-  const categoryType = route.query.category; // 'prize_blindbox'
-
-  if (tagType) {
-    // Apply tag filter if present
-    currentProducts = currentProducts.filter(product => product.tag === tagType);
-  } else if (categoryType === 'prize_blindbox') {
-    // Apply category filter only if no tag filter is active
-    currentProducts = currentProducts.filter(product => 
-      product.type === 'prize' || product.type === 'blindbox'
-    );
-  }
+  // **TODO**: Re-implement filtering based on the new data structure (e.g., status or category_id)
+  // The old filtering logic based on 'tag' and 'type' is removed for now.
 
   return currentProducts;
 });
