@@ -84,55 +84,53 @@ export default {
         <h1>{{ currentTitle }}</h1>
       </header>
       <div class="content-area">
-        <div class="container">
-            <div v-if="activeSection === 'dashboard'">
-            <div class="stats-cards">
-                <div class="card">
-                <h3>總銷售額</h3>
-                <p>NT$ 1,234,567</p>
-                </div>
-                <div class="card">
-                <h3>總訂單數</h3>
-                <p>5,432</p>
-                </div>
-                <div class="card">
-                <h3>新用戶</h3>
-                <p>123</p>
-                </div>
+        <div v-if="activeSection === 'dashboard'">
+          <div class="stats-cards">
+            <div class="card">
+              <h3>總銷售額</h3>
+              <p>NT$ 1,234,567</p>
             </div>
-            <div class="recent-orders admin-card">
-                <h2>最近訂單</h2>
-                <div class="admin-table-wrapper">
-                <table class="admin-table">
-                    <thead>
-                    <tr>
-                        <th>訂單編號</th>
-                        <th>顧客</th>
-                        <th>日期</th>
-                        <th>總金額</th>
-                        <th>狀態</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr v-for="order in recentOrders" :key="order.id">
-                        <td>{{ order.id }}</td>
-                        <td>{{ order.customer }}</td>
-                        <td>{{ order.date }}</td>
-                        <td>NT$ {{ order.amount.toLocaleString() }}</td>
-                        <td>
-                        <span :class="['status-badge', order.status]">{{ order.status }}</span>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-                </div>
+            <div class="card">
+              <h3>總訂單數</h3>
+              <p>5,432</p>
             </div>
+            <div class="card">
+              <h3>新用戶</h3>
+              <p>123</p>
             </div>
-            <!-- Use dynamic component to render the selected view -->
-            <keep-alive>
-                <component :is="activeView" :key="activeSection" v-if="activeView" />
-            </keep-alive>
+          </div>
+          <div class="recent-orders admin-card">
+            <h2>最近訂單</h2>
+            <div class="admin-table-wrapper">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>訂單編號</th>
+                    <th>顧客</th>
+                    <th>日期</th>
+                    <th>總金額</th>
+                    <th>狀態</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="order in recentOrders" :key="order.id">
+                    <td>{{ order.id }}</td>
+                    <td>{{ order.customer }}</td>
+                    <td>{{ order.date }}</td>
+                    <td>NT$ {{ order.amount.toLocaleString() }}</td>
+                    <td>
+                      <span :class="['status-badge', order.status]">{{ order.status }}</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
+        <!-- Use dynamic component to render the selected view -->
+        <keep-alive>
+            <component :is="activeView" :key="activeSection" v-if="activeView" />
+        </keep-alive>
       </div>
     </main>
   </div>
@@ -224,16 +222,9 @@ export default {
 }
 .main-header h1 { margin: 0; font-size: 1.5rem; }
 .content-area {
-  padding: 30px 0; /* Vertical padding only */
+  padding: 30px;
   overflow-y: auto;
   flex-grow: 1;
-}
-.container {
-    width: 100%;
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 30px;
-    box-sizing: border-box;
 }
 .stats-cards {
   display: grid;
@@ -244,15 +235,9 @@ export default {
 .card {
   background-color: #fff;
   padding: 25px;
-  border-radius: 8px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
-  border: 1px solid #e9ecef;
+  border-radius: var(--admin-border-radius);
+  box-shadow: var(--admin-card-shadow);
   text-align: center;
-  transition: all 0.2s ease-in-out;
-}
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 15px rgba(0,0,0,0.07);
 }
 .card h3 {
   margin: 0 0 10px;
@@ -289,9 +274,6 @@ export default {
     z-index: 1000;
 }
 @media (max-width: 768px) {
-  .container {
-    padding: 0 20px;
-  }
   .sidebar {
     position: fixed;
     transform: translateX(-100%);

@@ -19,10 +19,9 @@
   background-color: var(--admin-bg-color);
   padding: 25px;
   border-radius: var(--admin-border-radius);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
-  border: 1px solid #e9ecef;
+  box-shadow: var(--admin-card-shadow);
   overflow-x: auto;
-  margin-bottom: 30px;
+  margin-bottom: 20px; /* Add some space between cards if multiple on a page */
 }
 
 .admin-card .header {
@@ -32,13 +31,11 @@
   flex-wrap: wrap;
   gap: 15px;
   margin-bottom: 20px;
-  padding-bottom: 15px;
-  border-bottom: 1px solid #e9ecef;
 }
 
 .admin-card .header h1 {
   margin: 0;
-  font-size: 1.5em;
+  font-size: 1.6em;
   color: var(--admin-dark-color);
 }
 
@@ -50,41 +47,28 @@
 .admin-table {
   width: 100%;
   border-collapse: collapse;
-  /* table-layout: fixed; */ /* Removing fixed layout to allow natural column sizing */
+  table-layout: fixed; /* Crucial for preventing "broken" layouts */
 }
 
 .admin-table th,
 .admin-table td {
-  padding: 14px 16px;
+  padding: 12px 15px;
   text-align: left;
   vertical-align: middle;
-  border-bottom: 1px solid #e9ecef;
-  white-space: nowrap; /* Prevent wrapping in cells initially */
+  border-bottom: 1px solid var(--admin-medium-gray-color);
+  white-space: normal; /* Allow text to wrap within cells */
+  word-break: break-word; /* Break long words if necessary */
 }
-
-/* Allow specific columns to wrap */
-.admin-table td:nth-child(2), /* name */
-.admin-table td:nth-child(3) { /* description or email */
-  white-space: normal;
-  word-break: break-word;
-}
-
 
 .admin-table thead th {
-  background-color: #f8f9fa;
+  background-color: var(--admin-light-gray-color);
   font-weight: 600;
-  color: #495057;
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.admin-table tbody tr:nth-of-type(even) {
-  background-color: #fcfdfe;
+  color: var(--admin-text-color);
+  white-space: nowrap; /* Keep headers on one line */
 }
 
 .admin-table tbody tr:hover {
-  background-color: #f1f3f5;
+  background-color: #f9f9f9;
 }
 
 .admin-table .actions {
@@ -97,31 +81,31 @@
 
 /* --- BUTTONS --- */
 .admin-btn {
-  padding: 7px 15px;
-  border: 1px solid transparent;
+  padding: 8px 16px; /* Slightly more horizontal padding */
+  border: none;
   border-radius: 5px;
   cursor: pointer;
   white-space: nowrap;
   font-size: 14px;
   font-weight: 500;
   transition: all 0.2s ease-in-out;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  color: white;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* Add a subtle shadow */
 }
 .admin-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transform: translateY(-1px); /* Slight lift on hover */
+  box-shadow: 0 3px 6px rgba(0,0,0,0.15); /* Increase shadow on hover */
+  filter: brightness(95%); /* Darken slightly on hover */
 }
-.add-btn { background-color: var(--admin-success-color); color: white; border-color: var(--admin-success-color); }
-.edit-btn { background-color: var(--admin-primary-color); color: white; border-color: var(--admin-primary-color); }
-.delete-btn { background-color: var(--admin-danger-color); color: white; border-color: var(--admin-danger-color); }
-.view-btn { background-color: #6f42c1; color: white; border-color: #6f42c1; }
-.history-btn { background-color: var(--admin-info-color); color: white; border-color: var(--admin-info-color); }
-.disable-btn { background-color: var(--admin-warning-color); color: white; border-color: var(--admin-warning-color); }
-.enable-btn { background-color: #20c997; color: white; border-color: #20c997; }
-.save-btn { background-color: var(--admin-primary-color); color: white; border-color: var(--admin-primary-color); }
-.cancel-btn { background-color: transparent; color: #6c757d; border-color: #6c757d; }
-.cancel-btn:hover { background-color: #6c757d; color: white; }
-
+.add-btn { background-color: var(--admin-success-color); }
+.edit-btn { background-color: var(--admin-primary-color); }
+.delete-btn { background-color: var(--admin-danger-color); }
+.view-btn { background-color: #9b59b6; }
+.history-btn { background-color: var(--admin-info-color); }
+.disable-btn { background-color: var(--admin-warning-color); }
+.enable-btn { background-color: #27ae60; }
+.save-btn { background-color: var(--admin-primary-color); }
+.cancel-btn { background-color: var(--admin-dark-gray-color); }
 
 /* --- STATUS & SELECT --- */
 .status-badge {
