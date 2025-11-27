@@ -13,7 +13,7 @@ export default {
   data() {
     return {
       activeSection: 'dashboard',
-      isSidebarOpen: false, // State to control sidebar on mobile
+      isSidebarOpen: false,
       recentOrders: [
         { id: 'ORD001', customer: '張三', date: '2024-11-25', amount: 1250, status: '已出貨' },
         { id: 'ORD002', customer: '李四', date: '2024-11-25', amount: 800, status: '處理中' },
@@ -22,10 +22,25 @@ export default {
       ]
     };
   },
+  computed: {
+    // This computed property determines which component to render
+    // based on the activeSection, making the template cleaner and more robust.
+    activeView() {
+      switch (this.activeSection) {
+        case 'products':
+          return 'ProductManagement';
+        case 'orders':
+          return 'OrderManagement';
+        case 'users':
+          return 'UserManagement';
+        default:
+          return null;
+      }
+    }
+  },
   methods: {
     showSection(section) {
       this.activeSection = section;
-      // Close sidebar on navigation in mobile view
       if (window.innerWidth <= 768) {
         this.isSidebarOpen = false;
       }
@@ -63,57 +78,60 @@ export default {
     </aside>
 
     <main class="main-content">
-            <header class="main-header">
-              <button class="hamburger-btn" @click="toggleSidebar">&#9776;</button>
-              <h1>後台管理</h1>
-            </header>
-            <div class="content-area">
-              <div v-if="activeSection === 'dashboard'">
-                <div class="stats-cards">
-                  <div class="card">
-                    <h3>總銷售額</h3>
-                    <p>NT$ 1,234,567</p>
-                  </div>
-                  <div class="card">
-                    <h3>總訂單數</h3>
-                    <p>5,432</p>
-                  </div>
-                  <div class="card">
-                    <h3>新用戶</h3>
-                    <p>123</p>
-                  </div>
-                </div>
-                <div class="recent-orders">
-                  <h2>最近訂單</h2>
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>訂單編號</th>
-                        <th>顧客</th>
-                        <th>日期</th>
-                        <th>總金額</th>
-                        <th>狀態</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr v-for="order in recentOrders" :key="order.id">
-                        <td>{{ order.id }}</td>
-                        <td>{{ order.customer }}</td>
-                        <td>{{ order.date }}</td>
-                        <td>NT$ {{ order.amount.toLocaleString() }}</td>
-                        <td><span :class="['status', order.status.toLowerCase().replace(' ', '-')]">{{ order.status }}</span></td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-              <ProductManagement v-if="activeSection === 'products'" />
-              <OrderManagement v-if="activeSection === 'orders'" />
-              <UserManagement v-if="activeSection === 'users'" />
+      <header class="main-header">
+        <button class="hamburger-btn" @click="toggleSidebar">&#9776;</button>
+        <h1>後台管理</h1>
+      </header>
+      <div class="content-area">
+        <!-- Dashboard View -->
+        <div v-if="activeSection === 'dashboard'">
+          <div class="stats-cards">
+            <div class="card">
+              <h3>總銷售額</h3>
+              <p>NT$ 1,234,567</p>
             </div>
-          </main>
+            <div class="card">
+              <h3>總訂單數</h3>
+              <p>5,432</p>
+            </div>
+            <div class="card">
+              <h3>新用戶</h3>
+              <p>123</p>
+            </div>
+          </div>
+          <div class="recent-orders">
+            <h2>最近訂單</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th>訂單編號</th>
+                  <th>顧客</th>
+                  <th>日期</th>
+                  <th>總金額</th>
+                  <th>狀態</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="order in recentOrders" :key="order.id">
+                  <td>{{ order.id }}</td>
+                  <td>{{ order.customer }}</td>
+                  <td>{{ order.date }}</td>
+                  <td>NT$ {{ order.amount.toLocaleString() }}</td>
+                  <td><span :class="['status', order.status.toLowerCase().replace(' ', '-')]">{{ order.status }}</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-      </template>
+        
+        <!-- Dynamic Component for Management Views -->
+        <keep-alive>
+          <component :is="activeView" v-if="activeView" />
+        </keep-alive>
+      </div>
+    </main>
+  </div>
+</template>
       
       <style scoped>
       .admin-dashboard {
@@ -247,7 +265,7 @@ export default {
         .close-btn, .main-header { display: block; }
         .main-header { display: flex; }
         .content-area { padding: 20px; }
-        .stats-cards { grid-template-columns: 1fr; } /* Stack cards on mobile */
+        .stats-cards { grid-template-columns: 1fr; } /* Stack on mobile */
       }
       </style>
       
