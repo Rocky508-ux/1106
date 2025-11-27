@@ -72,7 +72,7 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue';
+import { ref, reactive } from 'vue';
 import { products } from '../../data/products.js';
 
 const showModal = ref(false);
