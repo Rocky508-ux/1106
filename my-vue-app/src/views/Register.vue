@@ -35,7 +35,8 @@
 <script setup>
 import { reactive } from 'vue';
 
-const emit = defineEmits(['navigate-to-login', 'registration-notification']);
+// ★★★ 修改：加入 'show-notification' ★★★
+const emit = defineEmits(['navigate-to-login', 'registration-notification', 'show-notification']);
 
 const registerForm = reactive({
   name: '',
@@ -48,7 +49,8 @@ const registerForm = reactive({
 
 function register() {
   if (registerForm.password !== registerForm.confirmPassword) {
-    alert('密碼不一致！');
+    // ★★★ 修改：用 show-notification 取代 alert ★★★
+    emit('show-notification', '密碼不一致！');
     return;
   }
   emit('registration-notification', '註冊功能需串接後端 API');
@@ -57,66 +59,15 @@ function register() {
 </script>
 
 <style scoped>
-.register-page-container {
-  width: 90%;
-  max-width: 500px;
-  margin: 50px auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  background: #fff;
-}
-
-h2 {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.form-group {
-  margin-bottom: 15px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 5px;
-}
-
-.form-group input {
-  width: 100%;
-  padding: 8px;
-  box-sizing: border-box;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-button {
-  width: 100%;
-  padding: 10px;
-  background-color: #42b983;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-button:hover {
-  background-color: #369f72;
-}
-
-.login-footer {
-  text-align: center;
-  margin-top: 15px;
-}
-
-.login-footer a {
-  color: #42b983;
-  cursor: pointer;
-  text-decoration: none;
-}
-
-.login-footer a:hover {
-  text-decoration: underline;
-}
+/* (樣式保持不變) */
+.register-page-container { width: 90%; max-width: 500px; margin: 50px auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); background: #fff; }
+h2 { text-align: center; margin-bottom: 20px; }
+.form-group { margin-bottom: 15px; }
+.form-group label { display: block; margin-bottom: 5px; }
+.form-group input { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+button { width: 100%; padding: 10px; background-color: #42b983; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
+button:hover { background-color: #369f72; }
+.login-footer { text-align: center; margin-top: 15px; }
+.login-footer a { color: #42b983; cursor: pointer; text-decoration: none; }
+.login-footer a:hover { text-decoration: underline; }
 </style>

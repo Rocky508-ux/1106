@@ -1,59 +1,48 @@
 <script setup>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, onMounted } from 'vue'; // 引入 onMounted
+import { useRouter, useRoute } from 'vue-router'; // 引入 useRoute
 
 const router = useRouter();
+const route = useRoute(); // 取得路由資訊
 const emit = defineEmits(['login-success', 'show-notification']);
 
 const email = ref('');
 const password = ref('');
 const errorMessage = ref('');
 
+// ★★★ 新增：檢查是否有路由轉址帶來的訊息 ★★★
+onMounted(() => {
+  if (route.query.msg) {
+    // 發出通知事件，讓 App.vue 顯示 Toast
+    emit('show-notification', route.query.msg);
+  }
+});
+
 const handleLogin = async () => {
   errorMessage.value = '';
-  
   try {
-    // --- 模擬後端 API 回傳的邏輯 (之後接 Spring Boot 會真的發請求) ---
-    // 假設這是後端查完資料庫後回傳的結果
     let mockResponse = {};
-
     if (email.value === 'admin@rc.com' && password.value === 'admin123') {
-      // 情境 A: 管理員登入
-      mockResponse = {
-        token: 'admin-token-123',
-        user: { name: 'Admin User', role: 'ADMIN' }
-      };
+      mockResponse = { token: 'admin-token-123', user: { name: 'Admin User', role: 'ADMIN' } };
     } else if (email.value === 'user@example.com' && password.value === '123456') {
-      // 情境 B: 一般會員登入
-      mockResponse = {
-        token: 'user-token-456',
-        user: { name: '一般會員', role: 'USER' }
-      };
+      mockResponse = { token: 'user-token-456', user: { name: '一般會員', role: 'USER' } };
     } else {
       throw new Error('帳號或密碼錯誤');
     }
-    // -----------------------------------------------------------
 
     const { token, user } = mockResponse;
-
-    // 1. 儲存 Token 和使用者資訊
     localStorage.setItem('authToken', token);
-    localStorage.setItem('userRole', user.role); // 把身分存起來，方便之後檢查
+    localStorage.setItem('userRole', user.role);
     localStorage.setItem('userName', user.name);
 
-    // 2. 發出全域登入成功事件 (更新 App.vue 狀態)
     emit('login-success');
     emit('show-notification', `歡迎回來，${user.name}！`);
 
-    // 3. 關鍵：根據身分導向不同頁面
     if (user.role === 'ADMIN') {
-      console.log('偵測到管理員，前往後台...');
-      router.push('/admin'); // 管理員去後台
+      router.push('/admin');
     } else {
-      console.log('偵測到會員，前往首頁...');
-      router.push('/');      // 一般人去首頁
+      router.push('/');
     }
-
   } catch (error) {
     console.error('登入失敗:', error);
     errorMessage.value = error.message || '登入失敗，請稍後再試。';
@@ -87,110 +76,18 @@ const handleLogin = async () => {
 </template>
 
 <style scoped>
-/* 參考註冊頁面的清新風格進行調整 */
-.login-container {
-  width: 90%;
-  max-width: 500px; /* 縮小最大寬度，對齊註冊頁面 */
-  margin: 50px auto;
-  padding: 30px; /* 調整內距 */
-  border: 1px solid #e0e0e0; /* 更淡的邊框 */
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* 更柔和的陰影 */
-  background: #fff;
-}
-
-h2 {
-  text-align: center;
-  margin-bottom: 25px;
-  font-size: 1.5rem;
-  color: #333;
-  font-weight: 700;
-}
-
-.form-group {
-  margin-bottom: 20px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: 500;
-  color: #555;
-  font-size: 0.95rem;
-}
-
-.form-group input {
-  width: 100%;
-  padding: 10px 12px;
-  box-sizing: border-box;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 1rem;
-  transition: border-color 0.3s;
-}
-
-.form-group input:focus {
-  border-color: #4285F4;
-  outline: none;
-}
-
-button {
-  width: 100%;
-  padding: 12px;
-  background-color: #4285F4; /* 維持藍色 */
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 1rem;
-  font-weight: 700;
-  transition: background-color 0.3s, transform 0.2s;
-  margin-top: 10px;
-}
-
-button:hover {
-  background-color: #3367d6;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 5px rgba(66, 133, 244, 0.3);
-}
-
-.error-message {
-  color: #d93025;
-  text-align: center;
-  margin-top: 15px;
-  font-size: 0.9rem;
-  background-color: #fce8e6;
-  padding: 8px;
-  border-radius: 4px;
-}
-
-.login-footer {
-  text-align: center;
-  margin-top: 20px;
-  color: #666;
-  font-size: 0.95rem;
-}
-
-.login-footer a {
-  color: #42b983; /* 配合註冊頁面的綠色連結 */
-  cursor: pointer;
-  text-decoration: none;
-  font-weight: 700;
-  margin-left: 5px;
-}
-
-.login-footer a:hover {
-  text-decoration: underline;
-}
-
-.dev-hint {
-  margin-top: 25px;
-  font-size: 0.85rem;
-  color: #666;
-  background: #f8f9fa;
-  padding: 15px;
-  border-radius: 6px;
-  border: 1px solid #eee;
-  line-height: 1.6;
-}
+/* (樣式保持不變) */
+.login-container { width: 90%; max-width: 500px; margin: 50px auto; padding: 30px; border: 1px solid #e0e0e0; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); background: #fff; }
+h2 { text-align: center; margin-bottom: 25px; font-size: 1.5rem; color: #333; font-weight: 700; }
+.form-group { margin-bottom: 20px; }
+.form-group label { display: block; margin-bottom: 8px; font-weight: 500; color: #555; font-size: 0.95rem; }
+.form-group input { width: 100%; padding: 10px 12px; box-sizing: border-box; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem; transition: border-color 0.3s; }
+.form-group input:focus { border-color: #4285F4; outline: none; }
+button { width: 100%; padding: 12px; background-color: #4285F4; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 1rem; font-weight: 700; transition: background-color 0.3s, transform 0.2s; margin-top: 10px; }
+button:hover { background-color: #3367d6; transform: translateY(-1px); box-shadow: 0 2px 5px rgba(66, 133, 244, 0.3); }
+.error-message { color: #d93025; text-align: center; margin-top: 15px; font-size: 0.9rem; background-color: #fce8e6; padding: 8px; border-radius: 4px; }
+.login-footer { text-align: center; margin-top: 20px; color: #666; font-size: 0.95rem; }
+.login-footer a { color: #42b983; cursor: pointer; text-decoration: none; font-weight: 700; margin-left: 5px; }
+.login-footer a:hover { text-decoration: underline; }
+.dev-hint { margin-top: 25px; font-size: 0.85rem; color: #666; background: #f8f9fa; padding: 15px; border-radius: 6px; border: 1px solid #eee; line-height: 1.6; }
 </style>

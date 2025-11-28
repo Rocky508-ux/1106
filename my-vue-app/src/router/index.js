@@ -10,7 +10,6 @@ import ShoppingCart from '../views/ShoppingCart.vue';
 import ProductDetail from '../views/ProductDetail.vue';
 import MemberCenter from '../views/MemberCenter.vue';
 import Admin from '../views/Admin.vue';
-// 移除 AdminLogin.vue，因為已經整合進 Login.vue
 
 const routes = [
   {
@@ -42,11 +41,13 @@ const routes = [
     path: '/profile',
     name: 'Profile',
     component: Profile,
+    meta: { requiresAuth: true }, // 需要登入
   },
   {
     path: '/orders',
     name: 'Orders',
     component: Orders,
+    meta: { requiresAuth: true }, // 需要登入
   },
   {
     path: '/cart',
@@ -63,44 +64,51 @@ const routes = [
     path: '/member-center',
     name: 'MemberCenter',
     component: MemberCenter,
+    meta: { requiresAuth: true }, // 需要登入
   },
   {
     path: '/admin',
     name: 'Admin',
     component: Admin,
-    // ★★★ 關鍵：加上 meta 標記，告訴路由守衛這個頁面需要管理員權限
-    meta: { requiresAdmin: true },
+    meta: { requiresAdmin: true }, // 需要管理員權限
   },
-  // 移除 /admin/login 路由
 ];
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
+  // ★★★ 優化：換頁時自動回到頂部 ★★★
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition;
+    }
+    return { top: 0 };
+  }
 });
 
-// ★★★ 路由守衛 (Navigation Guard) ★★★
-// 每次切換頁面前，都會執行這個函式
+// ★★★ 路由守衛：權限檢查 ★★★
 router.beforeEach((to, from, next) => {
-  // 檢查要去的頁面 (to) 是否有 requiresAdmin 標記
+  const token = localStorage.getItem('authToken');
+  const role = localStorage.getItem('userRole');
+
+  // 1. 管理員權限檢查
   if (to.meta.requiresAdmin) {
-    const token = localStorage.getItem('authToken');
-    const role = localStorage.getItem('userRole');
-
-    // 1. 如果沒登入 (沒 token) -> 踢去登入頁
     if (!token) {
-      alert('請先登入！');
-      return next('/login');
+      // 沒登入 -> 去登入頁，並帶上訊息
+      return next({ path: '/login', query: { msg: '請先登入！' } });
     }
-
-    // 2. 如果有登入，但身分不是 ADMIN -> 踢回首頁 (或顯示權限不足)
     if (role !== 'ADMIN') {
-      alert('權限不足，您無法進入後台！');
-      return next('/'); // 導向首頁
+      // 權限不足 -> 踢回首頁，並帶上訊息
+      return next({ path: '/', query: { msg: '權限不足，您無法進入後台！' } });
     }
   }
+
+  // 2. 一般會員權限檢查
+  if (to.meta.requiresAuth && !token) {
+    return next({ path: '/login', query: { msg: '請先登入會員才能查看此頁面！' } });
+  }
   
-  // 3. 如果都不符合上述阻擋條件，就放行
+  // 3. 放行
   next();
 });
 

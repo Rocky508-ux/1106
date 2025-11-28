@@ -20,6 +20,7 @@ const isNewActive = computed(() => route.fullPath === '/?tag=new');
 const isPrizeActive = computed(() => route.fullPath === '/?category=prize_blindbox');
 const isContactActive = computed(() => route.path === '/contact');
 
+// 檢查登入權限
 function checkAuth() {
   const token = localStorage.getItem('authToken');
   const role = localStorage.getItem('userRole');
@@ -36,25 +37,29 @@ function handleLoginSuccess() {
   checkAuth();
 }
 
-// 容器 Class 計算
+// ★★★ 判斷是否為後台頁面 ★★★
+const isAdminRoute = computed(() => route.path.startsWith('/admin'));
+
+// ★★★ 容器 Class 計算 ★★★
 const containerClass = computed(() => {
   if (route.path === '/') {
     return 'product-page-container';
-  } else if (route.path.startsWith('/admin')) {
+  } else if (isAdminRoute.value) {
     return 'full-width-page-container';
   } else {
     return 'standalone-page-container';
   }
 });
 
+// ★★★ Header 容器 Class 計算 ★★★
 const headerInnerClass = computed(() => {
-  if (route.path.startsWith('/admin')) {
+  if (isAdminRoute.value) {
     return 'header-full-width';
   }
   return 'header-inner-container';
 });
 
-// ★★★ 新增：計算購物車商品總數量 ★★★
+// ★★★ 購物車總數量計算 (修復重複加入數量不變的問題) ★★★
 const totalCartCount = computed(() => {
   return cartItems.value.reduce((total, item) => total + (item.quantity || 1), 0);
 });
@@ -71,6 +76,7 @@ function addNotification(message) {
   }, 3000);
 }
 
+// ★★★ 購物車核心邏輯 (補回來的) ★★★
 function addToCart(product) {
   const existingItem = cartItems.value.find(item => item.id === product.id);
   if (existingItem) {
@@ -116,7 +122,8 @@ function logout() {
 <template>
   <div id="gk-shop">
     <ToastNotification :notifications="notifications" />
-    <header class="main-header">
+    
+    <header class="main-header" v-if="!isAdminRoute">
       <div :class="headerInnerClass">
         <div class="top-bar">
           <div class="gk-title">
@@ -127,7 +134,6 @@ function logout() {
             <router-link to="/cart" class="auth-btn cart-btn">
               🛒 購物車 <span v-if="totalCartCount > 0">({{ totalCartCount }})</span>
             </router-link>
-            
             <router-link v-if="!isLoggedIn" to="/login" class="auth-btn login-btn">登入</router-link>
             <router-link v-if="!isLoggedIn" to="/register" class="auth-btn register-btn">註冊</router-link>
             <button class="auth-btn logout-btn" v-else @click="logout">登出</button>
@@ -161,9 +167,9 @@ function logout() {
       />
     </main>
 
-    <footer class="main-footer">
+    <footer class="main-footer" v-if="!isAdminRoute">
       <div class="footer-links">
-        <router-link to="/about">關於我們1</router-link> | 
+        <router-link to="/about">關於我們</router-link> | 
         <router-link to="/contact">聯絡我們</router-link> | 
         <router-link to="/orders">訂單查詢</router-link> | 
         <a href="#">售後服務</a> |
