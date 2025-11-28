@@ -8,38 +8,35 @@ const router = useRouter();
 const route = useRoute();
 
 // Global state
-const isLoggedIn = ref(false); // 改為預設 false，等 checkAuth 確認
-const isAdmin = ref(false);    // 新增：判斷是否為管理員
+const isLoggedIn = ref(false);
+const isAdmin = ref(false);
 const notifications = ref([]);
 const cartItems = ref([]);
 
-// 導航列 Active 狀態判斷
+// 導航列 Active 狀態
 const isPreorderActive = computed(() => route.fullPath === '/?tag=預購');
 const isInstockActive = computed(() => route.fullPath === '/?tag=現貨');
 const isNewActive = computed(() => route.fullPath === '/?tag=new');
 const isPrizeActive = computed(() => route.fullPath === '/?category=prize_blindbox');
 const isContactActive = computed(() => route.path === '/contact');
 
-// ★★★ 檢查登入狀態與權限 (核心邏輯) ★★★
 function checkAuth() {
   const token = localStorage.getItem('authToken');
   const role = localStorage.getItem('userRole');
   
-  isLoggedIn.value = !!token; // 有 token 就是已登入
-  isAdmin.value = role === 'ADMIN'; // role 是 ADMIN 才是管理員
+  isLoggedIn.value = !!token;
+  isAdmin.value = role === 'ADMIN';
 }
 
-// 畫面載入時，先檢查一次
 onMounted(() => {
   checkAuth();
 });
 
-// 當 Login.vue 發出 login-success 事件時，重新檢查權限
 function handleLoginSuccess() {
   checkAuth();
 }
 
-// 主內容容器 Class 計算
+// 容器 Class 計算
 const containerClass = computed(() => {
   if (route.path === '/') {
     return 'product-page-container';
@@ -50,12 +47,16 @@ const containerClass = computed(() => {
   }
 });
 
-// Header 內部容器 Class 計算
 const headerInnerClass = computed(() => {
   if (route.path.startsWith('/admin')) {
     return 'header-full-width';
   }
   return 'header-inner-container';
+});
+
+// ★★★ 新增：計算購物車商品總數量 ★★★
+const totalCartCount = computed(() => {
+  return cartItems.value.reduce((total, item) => total + (item.quantity || 1), 0);
 });
 
 function handleSearch(query) {
@@ -80,20 +81,34 @@ function addToCart(product) {
   addNotification(`已將 ${product.name} 加入購物車`);
 }
 
+function updateCartQuantity(productId, change) {
+  const item = cartItems.value.find(item => item.id === productId);
+  if (item) {
+    const newQuantity = item.quantity + change;
+    if (newQuantity >= 1) {
+      item.quantity = newQuantity;
+    }
+  }
+}
+
 function removeFromCart(productId) {
   cartItems.value = cartItems.value.filter(item => item.id !== productId);
 }
 
+function clearCart() {
+  cartItems.value = [];
+  addNotification('購物車已清空');
+}
+
 function logout() {
-  // 清除所有相關資訊
   localStorage.removeItem('authToken');
   localStorage.removeItem('userRole');
   localStorage.removeItem('userName');
   
   isLoggedIn.value = false;
-  isAdmin.value = false; // 清除管理員狀態
+  isAdmin.value = false;
   
-  router.push('/'); // 登出後回首頁
+  router.push('/');
   addNotification('已成功登出');
 }
 </script>
@@ -109,7 +124,10 @@ function logout() {
           </div>
           <search-bar @search="handleSearch"></search-bar>
           <div class="auth-buttons">
-            <router-link to="/cart" class="auth-btn cart-btn">🛒 購物車</router-link>
+            <router-link to="/cart" class="auth-btn cart-btn">
+              🛒 購物車 <span v-if="totalCartCount > 0">({{ totalCartCount }})</span>
+            </router-link>
+            
             <router-link v-if="!isLoggedIn" to="/login" class="auth-btn login-btn">登入</router-link>
             <router-link v-if="!isLoggedIn" to="/register" class="auth-btn register-btn">註冊</router-link>
             <button class="auth-btn logout-btn" v-else @click="logout">登出</button>
@@ -122,9 +140,7 @@ function logout() {
           <router-link to="/?tag=現貨" class="nav-item" :class="{ 'active': isInstockActive }">現貨商品</router-link>
           <router-link to="/?category=prize_blindbox" class="nav-item" :class="{ 'active': isPrizeActive }">景品/盒玩</router-link>
           <router-link to="/contact" class="nav-item" :class="{ 'active': isContactActive }">聯絡我們</router-link>
-          
           <router-link v-if="isLoggedIn" to="/member-center" class="nav-item">會員中心</router-link>
-          
           <router-link v-if="isAdmin" to="/admin" class="nav-item">管理者後台</router-link>
         </nav>
       </div>
@@ -138,7 +154,9 @@ function logout() {
         @registration-notification="addNotification"
         @require-login="$router.push('/login')"
         @add-to-cart="addToCart"
+        @update-quantity="updateCartQuantity" 
         @remove-from-cart="removeFromCart"
+        @clear-cart="clearCart" 
         @show-notification="addNotification"
       />
     </main>

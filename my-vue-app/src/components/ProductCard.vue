@@ -34,13 +34,11 @@ defineEmits(['add-to-cart']);
 
 const router = useRouter();
 
-// 轉換顯示文字 (例如資料庫存 'new' 但你想顯示 'NEW!')
 const getTagLabel = (tag) => {
   if (tag === 'new') return 'NEW';
-  return tag; // '預購' 和 '現貨' 直接顯示
+  return tag;
 };
 
-// Find the main image for this product
 const mainImage = computed(() => {
   const image = productImages.value.find(
     img => img.product_id === props.product.id && img.is_main
@@ -54,7 +52,6 @@ function navigateToDetail() {
 </script>
 
 <style scoped>
-/* Scoped styles specific to ProductCard */
 .product-card {
   border: 1px solid #e0e0e0;
   display: flex;
@@ -64,7 +61,7 @@ function navigateToDetail() {
   border-radius: 8px;
   overflow: hidden;
   cursor: pointer;
-  position: relative; /* 確保子元素定位正確 */
+  position: relative;
 }
 
 .product-card:hover {
@@ -75,16 +72,25 @@ function navigateToDetail() {
 .product-image-container {
   position: relative;
   width: 100%;
-  aspect-ratio: 1 / 1;
+  /* ★★★ 關鍵修改 1：改成 3:4 (直立長方形)，比較適合公仔照片 ★★★ */
+  aspect-ratio: 3 / 4; 
   overflow: hidden;
-  background-color: #f8f8f8;
+  background-color: #fff; /* 改成白色背景，萬一有留白也比較融合 */
   border-bottom: 1px solid #f0f0f0;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .product-image-container img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  /* 保持 cover (填滿)，但配合長方形格子，裁切會變少 */
+  object-fit: cover; 
+  /* ★★★ 關鍵修改 2：對齊上方 (優先顯示頭部) ★★★ */
+  object-position: top center;
+  
   display: block;
   transition: transform 0.3s ease-in-out;
 }
@@ -93,7 +99,14 @@ function navigateToDetail() {
   transform: scale(1.05);
 }
 
-/* ★★★ 標籤樣式補充 (主要顏色邏輯在 App.css) ★★★ */
+.placeholder-image {
+  color: #999;
+  font-size: 0.9rem;
+  font-weight: bold;
+  text-align: center;
+  padding: 10px;
+}
+
 .product-tag {
   position: absolute;
   top: 10px;
@@ -129,6 +142,8 @@ function navigateToDetail() {
   justify-content: space-between;
   align-items: center;
   margin-top: auto;
+  gap: 12px;
+  width: 100%;
 }
 
 .product-price-range {
@@ -136,6 +151,7 @@ function navigateToDetail() {
   font-weight: bold;
   color: #DB4437;
   margin: 0;
+  white-space: nowrap;
 }
 
 .buy-btn {
@@ -147,11 +163,34 @@ function navigateToDetail() {
   cursor: pointer;
   transition: all 0.3s ease;
   font-size: 0.9rem;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .buy-btn:hover {
   background-color: #3367d6;
   transform: translateY(-1px);
   box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+/* 手機版 RWD 優化 */
+@media (max-width: 768px) {
+  .product-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .product-price-range {
+    align-self: flex-start;
+    font-size: 1.2rem;
+    margin-bottom: 4px;
+  }
+
+  .buy-btn {
+    width: 100%;
+    text-align: center;
+    padding: 10px 0;
+  }
 }
 </style>
